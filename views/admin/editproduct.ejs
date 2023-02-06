@@ -1,0 +1,92 @@
+<%- include('../admin/layouts/adminheader.ejs') -%>
+<div class="pb-5">
+    <div class="col-md-12 m-auto pb-3 " style="background: rgba(243, 241, 241, 0.507);">
+
+        <div class="container pb-5">
+            <h4 class="text-center pt-5">EDIT PRODUCT</h4>
+<body class="d-flex flex-column min-vh-100">
+    
+    <main class="form-product">
+        <form  action="/admin/editproduct/<%= product._id %>"method="post" id="product-form" enctype="multipart/form-data" >
+            <div class="mb-3 ">
+                <label for="productNameInput" class="form-label"> Product Name</label>
+                <input type="text"  name="ProductName" value="<%= product.productName %> " class="form-control" required>
+                      
+            </div>
+
+           
+          <select class="group input-group form-control mb-3" name="category" id="">
+            <option value="" selected>Select category</option>
+
+       
+            <%category.forEach(function(category){ %>
+            <option  value="<%=category._id%>">
+              <%= category.categoryName %>
+            </option>
+            <% }) %> 
+        </select>
+
+            <div class="mb-3">
+                <label for="productNameInput" class="form-label"> Description</label>
+                <input type="text" name="description"class="form-control" value="<%= product.description %> " class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="productNameInput" class="form-label">Image </label>
+                <input type="file" name="image"class="form-control" value="<%= product.image %> " class="form-control" multiple>
+              <%  for(let i=0;i<product.image.length;i++){%>
+                
+                <img src="/uploads/<%= product.image[i] %>" height="100" width="100"class="img-thumbnail mt-1" required>
+               
+               
+                <%}%>
+                <div class="previewImages"></div> 
+            </div>
+            <div class="mb-3">
+                <label for="productNameInput" class="form-label">Price</label>
+                <input type="number" name="price"class="form-control" value="<%= product.price %>" class="form-control" required> 
+            </div>
+            <div class="mb-3">
+                <label for="productNameInput" class="form-label">Quantity</label>
+                <input type="number" name="quantity" class="form-control" value="<%= product.quantity %> " class="form-control" required> 
+            </div>
+                 <div class="mb-3">
+                    <label for="productNameInput" class="form-label">In Stock</label>
+                    <input type="text" name="instock"class="form-control" value="<%= product.instock%>" class="form-control" required> 
+                </div> 
+                <div class="mb-3">
+                    <label for="productNameInput" class="form-label">Stock Value</label>
+                    <input type="number" name="stockvalue"class="form-control" value="<%= product.stockvalue%>" class="form-control" required> 
+                </div> 
+                <button type="submit" class="btn btn-warning">Submit</button>
+        </form>
+  
+    </main>
+    
+</div>
+
+
+</div>
+
+
+</div>
+    <%- include('../admin/layouts/adminfooter.ejs') -%>
+    <script>
+        $(document).ready(function(){
+        let imgPreview = function(input,imagePlace){
+          if(input.files){
+            let allFiles = input.files.length
+            for(i=0;i<allFiles;i++){
+              let reader = new FileReader()
+              reader.onload = function(event){
+                $($.parseHTML("<img>")).attr("src",event.target.result).appendTo(imagePlace)
+              }
+              reader.readAsDataURL(input.files[i])
+            }
+          }
+        }
+        $("#file-input").on("change",function(){
+            imgPreview(this,"div.previewImages")
+          })
+      })
+    </script>

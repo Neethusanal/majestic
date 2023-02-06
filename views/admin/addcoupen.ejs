@@ -1,0 +1,72 @@
+<%- include('../admin/layouts/adminheader.ejs') -%>
+
+<div class="row mt-3">
+  <div class="col-lg-6">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title">ADD COUPENS</div>
+        <hr />
+        <form action="/admin/addcoupen" method="post">
+          <div class="form-group">
+            <label for="input-1">Coupen Code</label>
+            <input
+              type="text"
+              name="coupenCode"
+              class="form-control"
+              id="input-1"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="input-2">Status</label>
+            <input
+              type="text"
+              name="status"
+              class="form-control"
+              id="input-2"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="input-3">Discount %</label>
+            <input
+              type="text"
+              name="amount"
+              class="form-control"
+              id="input-3"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="input-4">Min discount Amount</label>
+            <input
+              type="text"
+              name="minOrder"
+              class="form-control"
+              id="input-4"
+              placeholder=""
+            />
+          </div>
+          <div class="form-group">
+            <label for="input-5">Expiry Date</label>
+            <input
+              type="date"
+              name="expirydate"
+              class="form-control"
+              id="input-5"
+              placeholder=""
+            />
+          </div>
+
+          <div class="form-group">
+            <button type="submit" class="btn btn-light px-5">
+              <i class="icon-lock"></i> ADD
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <%- include('../admin/layouts/adminfooter.ejs') -%>
+</div>

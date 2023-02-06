@@ -1,0 +1,73 @@
+
+<%- include('../admin/layouts/adminheader.ejs') -%>
+<form action="/admin/viewuser" method="post">
+<div class="col-lg-12 col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">PRODUCT DETAILS</h5>
+        <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">PRODUCT NAME</th>
+              <th scope="col">CATEGORY</th>
+              <!-- <th scope="col">DESCRIPTION</th> -->
+              <th scope="col">IMAGE</th>
+              <th scope="col">PRICE</th>
+              <th scope="col"> STOCK  </th>
+              <th scope="col"> INSTOCK </th>
+              <th colspan="2">ACTIONS</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <% product.forEach( function(product) { %>
+                <tr>
+                  <th scope="row"><%= index++ %></th>
+                  <td><%= product.productName %></td>
+                  
+                  <td><%= product.category %></td>
+                  <!-- <td><%= product.description %></td> -->
+
+                  <td>
+                   
+                     <img src="/uploads/<%=product.image[0] %>"width="70" height="70" >
+                  
+                    </td>
+                  <td><%= product.price %></td>
+                  <td><%= product.stockvalue %></td>
+                
+                  <td><%= product.instock %></td>
+                
+                  <td>
+                    <a href="/admin/editproduct/<%= product._id %>"><button type="button"
+                    class="btn btn-primary">EDIT </button></a> 
+                    
+                  </td>
+                  <td>
+                    <% if (product.instock==true){%>
+                        <a href="/admin/unlistproduct/<%= product._id %>"><button type="button"
+                            class="btn btn-primary " style="height:30px;width:90px">unlist</button></a>
+                    <%}  
+                    else { %>
+                        <a href="/admin/listproduct/<%= product._id %>"><button type="button"
+                            class="btn btn-primary " style="height:30px;width:90px">list</button></a>
+                            <% } %>
+                </td>
+            </tr>
+            <% }) %>
+            
+            <a href="/admin/addproduct"><button type="button"
+              class="btn btn-primary mb-3 ">Add products</button></a> 
+              
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+</form><!--End Row-->
+<%- include('../admin/layouts/adminfooter.ejs') -%>

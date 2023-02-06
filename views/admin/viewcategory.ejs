@@ -1,0 +1,76 @@
+<%- include('../admin/layouts/adminheader.ejs') -%>
+<form action="/viewcategory" method="post" >
+<div class="col-lg-12 col-md-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">CATEGORY DETAILS</h5>
+        <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">NO</th>
+              <th scope="col">CATEGORY NAME</th>
+              <!-- <th scope="col">INSTOCK </th> -->
+              <th colspan="3">ACTIONS</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <% category.forEach( function(category,index) { %>
+                <tr>
+                  <th scope="row">
+                    <%= index++ %>
+                  </th>
+                  <td>
+                    <%= category.categoryName %>
+                  </td>
+
+
+                
+                <!-- <td>
+                    <%= category.instock %>
+                  </td> -->
+                  
+                  <td>
+                    
+                    <a href="/admin/editcategory/<%= category._id %>"><button type="button"
+                    class="btn btn-primary">Edit </button></a> 
+                    
+                  </td> 
+                 
+
+                  <td>
+                    <td>
+                      <% if (category.deleted==false){%>
+                          <a href="/admin/unlistCategory/<%= category._id %>"><button type="button"
+                              class="btn btn-primary"  style="height:30px;width:90px">unlist</button></a>
+                      <%}  
+                      else { %>
+                          <a href="/admin/listCategory/<%= category._id %>"><button type="button"
+                              class="btn btn-primary" style="height:30px;width:90px">list</button></a>
+                              <% } %>
+                  </td>
+
+                  
+
+                  
+                     
+                    
+                   </td>
+                  
+                </tr>
+                <% }) %>
+
+                
+                <a href="/admin/addcategory"><button type="button"
+                  class="btn btn-primary float-right mb-3">Add category</button></a> 
+          </tbody>
+        </table>
+      </div>
+      </div>
+    </div>
+  </div>
+</div><!--End Row-->
+</form>
+
+<%- include('../admin/layouts/adminfooter.ejs') -%>

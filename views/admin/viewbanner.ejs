@@ -1,0 +1,85 @@
+<%- include('../admin/layouts/adminheader.ejs') -%>
+
+
+  <div class="clearfix"></div>
+
+
+
+
+
+
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Banner Management</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">Banner Name</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th colspan="3">Actions</th>
+              </tr>
+              </tr>
+            </thead>
+            <tbody>
+
+
+
+              <% banner.forEach( function(banner,index) { %>
+                <tr>
+                  <th scope="row">
+                    <%=index++%>
+                  </th>
+                  <td>
+                    <%= banner?.bannerName %>
+                  </td>
+                  <td>
+                    <%= banner.description%>
+                  </td>
+                  <td>
+
+                    <img src="/uploads/<%= banner?.image%>" width="70" height="70">
+                  </td>
+
+                  <td>
+                    <form action="/admin/deletebanner/<%= banner._id %>" method="post">
+                      <button type="submit" class="btn  btn-danger" style="width: 100px;"
+                        onclick="return confirm('Are you sure you want to delete ?')"><i
+                          class="bi bi-trash-fill"></i>DELETE</button>
+                  </td>
+                  <td>
+                    <a href="/admin/editbanner/<%= banner._id %>"><button type="button" class="btn btn-primary"
+                        style="width:100px">EDIT </button></a>
+
+                  </td>
+                  <td>
+                    <% if (banner.status==true){%>
+                        <a href="/admin/disable/<%= banner?._id %>"><button type="button"
+                            class="btn btn-primary" style="width:100px">Disable</button></a>
+                    <%}  
+                    else { %>
+                        <a href="/admin/enable/<%= banner?._id %>"><button type="button"
+                            class="btn btn-primary" style="width:100px">Enable</button></a>
+                            <% } %>
+                </td>
+                </tr>
+                <% }) %>
+
+                  <a href="/admin/addbanner"><button type="button" class="btn btn-primary mb-3 ">Add Banner</button></a>
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div><!--End Row-->
+
+
+
+
+
+  <%- include('../admin/layouts/adminfooter.ejs') -%>

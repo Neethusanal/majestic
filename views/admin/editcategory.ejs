@@ -1,0 +1,41 @@
+
+
+
+
+
+<%- include('../admin/layouts/adminheader.ejs') -%>
+
+
+
+
+
+
+
+    <div class="col-lg">
+      <div class="card">
+          <div class="card-body">
+              <div class="card-title">Edit Category</div>
+              <hr>
+              <form action="/admin/editcategory/<%=category._id %>" method="post">
+
+
+                  <div class="form-group">
+                      <label for="input-4"> Category Name</label>
+                      <input type="text"  name="categoryName" value="<%= category.categoryName%> " class="form-control" required>
+                      
+
+                  </div>
+
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-primary px-5"> Edit</button>
+                  </div>
+              </form>
+          </div>
+      </div>
+  </div>
+
+
+
+
+
+<%- include('../admin/layouts/adminfooter.ejs') -%>

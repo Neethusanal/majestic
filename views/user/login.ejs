@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/user/css/style.css" />
+  </head>
+  <body>
+    <div class="login-form">
+      <form action="/login" method="post">
+        <h1>Login</h1>
+        <div class="content">
+          <div class="input-field">
+            <input
+              name="email"
+              type="email"
+              placeholder="Email"
+              autocomplete="nope"
+              value="nithu419@gmail.com"
+            />
+          </div>
+          <div class="input-field">
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              autocomplete="new-password"
+              value="1234"
+              
+            />
+          </div>
+          <a href="forgetpassword" class="link">Forgot Your Password?</a>
+        </div>
+        <%  if(status == false){ %>
+          <p id="ban" class="text-danger text-center  "> Your  Account has been banned</p>
+          <% } %>
+        <div class="action">
+          <button><a href="signup" class="link">Register</a></button>
+          <button>Sign in</button>
+        </div>
+      </form>
+    </div>
+    <!-- partial -->
+    <script src="javascripts/script.js"></script>
+  </body>
+</html>

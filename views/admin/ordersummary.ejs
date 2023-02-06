@@ -1,0 +1,176 @@
+
+<%- include('../admin/layouts/adminheader.ejs') -%>
+
+
+<div class="container-fluid my-5  d-flex  justify-content-center ">
+  <div class="card card-1">
+      <!-- <div class="card-header bg-white">
+          <div class="media flex-sm-row flex-column-reverse justify-content-between  ">
+              <div class="col my-auto"> <h4 class="mb-0">Thanks for your Order, </h4> </div>
+           
+          </div>
+      </div> -->
+      <div class="card-body">
+          <div class="row justify-content-between mb-3">
+              <div class="col-auto"> <h6 class="color-1 mb-0 change-color">Receipt</h6> </div>
+              <div class="col-auto  "> <small>Order Id : <%=order._id%></small> </div>
+          </div>
+        
+           
+            
+                 
+          <% order.products.forEach(function(data){%>
+      
+          <div class="row mt-4">
+              <div class="col">
+                  <div class="card card-2">
+                      <div class="card-body">
+                       
+                          <div class="media">
+                              <div class="sq align-self-center "> <img class="img-fluid  my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="/uploads/<%= data.productid.image[0] %>" width="100" height="100" /> </div>
+                              <div class="media-body ">
+                                
+                                      <div class="col-auto my-auto "> <h4><%= data.productid.productName%></h4> </div>
+                                      <div class="col my-auto  ">Qty <%= data.quantity%> </div>
+                                      <div class="col my-auto  ">RS <%=data.price%></div>
+                                      <!-- <div class="col my-auto  "> <small>Qty : 1</small></div>
+                                      <div class="col my-auto ">  <h6 class="mb-0">&#8377;1,235.00</h6>
+                                      </div> -->
+                               
+                              </div>
+                          </div>
+                          <!-- <hr class="my-3 "> -->
+                         
+                      </div>
+                    
+                  </div>
+              </div>
+          </div>
+          <%})%>
+          <div class="row mt-4">
+              <div class="col">
+
+                <div class="card shadow-0 border mb-4 m-t-20 ">
+                    <h2 class="text-white">Delivery Address</h2>
+                    <div class="card-body">
+                        
+                        <div class="row">
+                            <%= order.addressData.fullName%><br>
+                                <%= order.addressData.house%><br>
+                                    <%= order.addressData.post%><br>
+                                        <%= order.addressData.city%><br>
+                                            <%= order.addressData.district%><br>
+                                                <%= order.addressData.pin%><br>
+                                                    <%= order.addressData.phone%>
+        
+        
+        
+                        </div>
+        
+                    </div>
+                
+                </div>
+                <div>
+
+                <tbody>
+                    <tr>
+                      <th >Payment Id:</th>
+                      <td><%=order.payment.payment_id%></td><br>
+                      
+                    </tr>
+                    <tr>
+                      <th>Payment Method</th>
+                      <td><%=order.payment.payment_method%></td><br>
+                      
+                    </tr>
+
+                    <tr>
+                      <th>Items:</th>
+                      <td><%=order.products.length%></td><br>
+                     </tr>
+                    
+                     <tr>
+                      <th>Bill Amount:</th>
+                      <td><%=order.billamount%></td>
+                     </tr>
+
+                    
+                  </tbody>
+                </table>
+            </div>
+                  <!-- <div class="row justify-content-between">
+                      <div class="col-auto"><p class="mb-1 text-dark"><b>Order Details</b></p></div>
+                      <div class="flex-sm-col text-right col"> <p class="mb-1"><b>Total</b></p> </div>
+                      <div class="flex-sm-col col-auto"> <p class="mb-1">&#8377;</p> </div>
+                  </div> -->
+                  <!-- <div class="row justify-content-between">
+                      <div class="flex-sm-col text-right col"><p class="mb-1"> <b>Discount</b></p> </div>
+                      <div class="flex-sm-col col-auto"><p class="mb-1">&#8377;coupon discount </p></div>
+                  </div> -->
+                  <!-- <div class="row justify-content-between">
+                      <div class="flex-sm-col text-right col"><p class="mb-1"><b>GST 18%</b></p></div>
+                      <div class="flex-sm-col col-auto"><p class="mb-1">843</p></div>
+                  </div> -->
+                  <!-- <div class="row justify-content-between">
+                      <div class="flex-sm-col text-right col"><p class="mb-1"><b>Delivery Charges</b></p></div>
+                      <div class="flex-sm-col col-auto"><p class="mb-1">Free</p></div>
+                  </div> -->
+              </div>
+          </div>
+          <!-- <div class="row invoice ">
+              <div class="col"><p class="mb-1"> Invoice Number : <%= order._id %> </p><p class="mb-1">Invoice Date : <%= order.ordered_date.getDate()+ '-' + (order.ordered_date.getMonth()+1) +'-'+
+                order.ordered_date.getFullYear()%></p><p class="mb-1">Recepits Voucher:18KU-62IIK</p></div>
+          </div> -->
+      </div>
+      <div class="card-footer">
+          <div class="jumbotron-fluid">
+              <!-- <div class="row justify-content-between ">
+                  <div class="col-sm-auto col-auto my-auto"><img class="img-fluid my-auto align-self-center " src="https://tse4.mm.bing.net/th?id=OIP.rNqqwSsZnWLf97BtnMXRcwHaHa&pid=Api&P=0" width="115" height="115"></div>
+                  <div class="col-auto my-auto "><h5 class="mb-0 font-weight-bold">TOTAL PAID</h5></div>
+                  <div class="col-auto my-auto ml-auto"><h6 class="display-3 "><small>RS: <%= order.billamount %> </small></h6></div>
+              </div> -->
+              <!-- <div class="row mb-3 mt-3 mt-md-0">
+                  <div class="col-auto border-line"> <small class="text-white">PAN:AA02hDW7E</small></div>
+                  <div class="col-auto border-line"> <small class="text-white">CIN:UMMC20PTC </small></div>
+                  <div class="col-auto "><small class="text-white">GSTN:268FD07EXX </small> </div>
+              </div> -->
+          </div>
+      </div><div>
+        <div>
+            <div class="p-3  my-3 " style="border: 1px solid rgba(29, 11, 11, 0.145); background-color: #d1e7dd;">
+              
+              <form action="/admin/deliverystatus/<%= order._id %>" method="post">
+              <h5>Delivery status</h5>
+              <span><input type="radio"   name="deliveryStatus" value="ordered" required 
+                <% if(order.delivery_status.ordered.state==true){ %> checked <% } %>>
+                <label for=" ">Ordered</label></span><br>
+              <span><input type="radio"   name="deliveryStatus" value="shipped" required
+                <% if(order.delivery_status.shipped.state==true){ %> checked <% } %>>
+                  <label for=" ">Shipped</label></span><br>
+              <span><input type="radio"   name="deliveryStatus" value="outForDelivery" required
+                <% if(order.delivery_status.out_for_delivery.state==true){ %> checked <% } %>>
+                  <label for=" ">Out For Delivery</label></span><br>
+                  <span><input type="radio"   name="deliveryStatus" value="delivered" required
+                    <% if(order.delivery_status.delivered.state==true){ %> checked <% } %>>
+                    <label for=" ">Delivered</label></span><br>
+                    <% if(order.delivery_status.delivered.state == false && order.delivery_status.cancelled.state == false){ %>
+                        <button class="btn btn-success btn-sm my-2" type="submit" id="delStat">Update</button>
+                      <% } else if(order.delivery_status.cancelled.state == true) { %>
+                      <h5 class="mt-2 py-2 text-danger text-center" style="border: 1px solid rgba(0, 0, 0, 0.17); background-color: #c7dbd2;">Order Cancelled </h5>
+                      <% } else if(order.delivery_status.delivered.state == true) { %>
+                        <h5 class="mt-2 py-2 text-success text-center" style="border: 1px solid rgba(0, 0, 0, 0.17); background-color: #c7dbd2;">Order Delivered </h5>
+                      <% } %>
+    
+          
+          
+                  </form>
+                  
+          </div>
+          </div>
+      </div>
+  </div>
+</div>
+  
+
+ 
+  <%- include('../admin/layouts/adminfooter.ejs') -%>

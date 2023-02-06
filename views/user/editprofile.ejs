@@ -1,0 +1,89 @@
+<%- include('../user/layouts/userheader.ejs') -%>
+<body>
+  <div class="container m-t-200">
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+
+            <div class="row mt-3">
+                <div class="col-lg-8" >
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">Edit Profile</div>
+                            <hr>
+                            <form action="" method="post">
+                                <div class="form-group">
+                                    <label for="input-1">Full Name</label>
+                                    <input type="text" class="form-control" required name="fullName" id="input-1" value="" placeholder="Enter Your Full Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-1">User Name</label>
+                                    <input type="text" class="form-control" required name="userName" id="input-1" value="" placeholder="Enter Your User Name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-2">Email</label>
+                                    <input type="email" name="email" required value="" class="form-control" id="input-2"
+                                        placeholder="Enter Your Email Address">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-3">Mobile</label>
+                                    <input type="text" class="form-control" required value="" name="phone" id="input-3"
+                                        placeholder="Enter Your Mobile Number">
+                                </div>
+                                
+
+
+
+
+
+
+
+
+
+                               
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-light px-5">
+                                        Edit Profile</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!--End Row-->
+
+            <!--start overlay-->
+            <div class="overlay toggle-menu"></div>
+            <!--end overlay-->
+
+        </div>
+        <!-- End container-fluid-->
+
+    </div>
+
+
+
+
+
+
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+</body>
+<%- include('../user/layouts/userfooter.ejs') -%>

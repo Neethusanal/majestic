@@ -1,0 +1,343 @@
+<%- include('../user/layouts/userheader.ejs') -%>
+
+
+
+    <!--  Google Fonts-->
+    <!-- <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet"> -->
+    <!-- Bootstrap CSS -->
+    <!-- <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'> -->
+
+<!-- 
+    <link rel="'stylesheet" href="user/css/profile.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+     -->
+    <body>
+
+     <div class="student-profile py-4">
+         <div class="container m-t-80">
+            <div class="row">
+                <div class="col-lg-4 ">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent text-center">
+                            <img class="profile_img"
+                                src="https://tse4.mm.bing.net/th?id=OIP.XzbnPcReFWub6Dn5ASpGdwHaHa&pid=Api&P=0"
+                                width="70" height="70" alt="User dp">
+                            <h3>User</h3>
+                        </div>
+                        <div class="card-body  bg-secondary">
+                            <p class="mb-0 text-white "><strong class="pr-1  ">Hii:</strong><%= user.fullName%></p>
+                            <a
+                                                   class="btn btn-sm btn-block  d-flex align-items-center justify-content-center px-0 text-white mt-3"
+                                                   href="/orderDetails" style="background-color: rgb(19, 20, 19);">Order Details</a>
+                                           
+
+
+                        </div>
+                    </div>
+                </div> 
+                <div class="col-lg-7">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-transparent ">
+                            <h3 class="mb-0"><i class="far fa-clone pr-1"></i>General Information</h3>
+                        </div>
+                        <div class="card-body pt-0">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th width="30%">Full Name</th>
+                                    <td width="2%">:</td>
+                                    <td><%= user.fullName%></td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Email Id </th>
+                                    <td width="2%">:</td>
+                                    <td><%= user.email%></td>
+                                </tr>
+                                <tr>
+                                    <th width="30%">Phone Number</th>
+                                    <td width="2%">:</td>
+                                    <td><%= user.phone%></td>
+                                </tr>
+                               
+
+                            </table>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="actionmodel" action="/addaddress/<%=user._id%>" method="post">
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example3">Name</label>
+                            <input type="text" class="form-control" name="Name" id="name" required />
+
+                        </div>
+
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example3">House</label>
+                            <input type="text" id="house" class="form-control" name="House" required />
+
+                        </div>
+
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example4">Phone</label>
+                            <input type="number" id="Phone" class="form-control " name="Phone" required />
+                        </div>
+
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example3">Post</label>
+                            <input type="text" class="form-control" id="post" name="post" required />
+
+                        </div>
+
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example4">Pin</label>
+                            <input type="number" id="pin" class="form-control " name="pin" required />
+                        </div>
+
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example4">City</label>
+                            <input type="text" id="city" class="form-control " name="city" required />
+                        </div>
+
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example4">District</label>
+                            <input type="text" id="district" class="form-control" name="district" required />
+                        </div>
+                        <!-- state input -->
+                        <div class="form-outline mb-1">
+                            <label class="form-label" for="form3Example4">State</label>
+                            <input type="text" id="state" class="form-control " name="state" required />
+                        </div>
+                        <!-- Submit button -->
+                        <div class="d-flex justify-content-center mt-3">
+                            <button type="submit" class="btn btn-dark  ">Submit</button>
+                        </div>
+                    </form>
+                </div>
+                 <div class="modal-footer">
+
+          <!-- <button type="button"  class="btn btn-primary">Add address</button> -->
+        </div> 
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="page-holder">
+        <div class="container">
+            <!-- HERO SECTION-->
+
+            <div class="page-content">
+
+                <div class="widget-content widget-content-area add-manage-product-2 container mt-3">
+                    <div class="row ">
+
+
+                         <div class="col-xl-5 col-md-12 ">
+                            <div class="card card-default "
+                                style="border-color: white !important; color: black !important;">
+
+                                <div class="card border-0 ad-box-shadow p-0 ">
+
+                                 
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-xl-12 col-md-12 ">
+
+                            <div class="admincard card card-default" style="border-color: white !important;">
+
+                                <div class="card-body">
+                                    <div class="card-body">
+                                        <form class="form-horizontal" action="" method="post"
+                                            enctype="multipart/form-data">
+                                           
+                                            <input type="file" name="product_images" class="d-none" id="product_images">
+
+
+                                            <div class="border p-2 mt-2" id="">
+                                                <div id="addressList">
+
+                                                    
+                                                   
+                                                </div>
+
+
+
+                                                <div class="bg-dash-dark-2 py-4">
+                                                    <div class="container-fluid d-flex justify-content-center">
+
+                                                        <a href="#"> <!-- Button trigger modal -->
+                                                            <button type="button" onclick="addaddress(user._id)" class="btn btn-dark"
+                                                                data-toggle="modal" data-target="#exampleModal" >
+                                                            ADD ADDRESS
+                                                            </button></a>
+                                                    </div>
+                                                </div>
+
+                                                <!-- <div class="form-group mb-4">
+                                                    <div class="row">
+                                                        <label class="col-md-4">Address</label>
+                                                        <div class="col-md-8">
+                                                           
+                                                           < % user.addressData.forEach(function(val) { %>
+                                                                <a  class="text-decoration-none text-dark "  data-bs-toggle="modal" data-bs-target="#accountCreationModal">
+                                                                    <div class="card p-3 bg-light my-2"  id="item">
+                                                                        <div class="d-flex justify-content-between">
+                                                                           
+                                                                            <a class="text-danger text-lg-end text-decoration-none"  href="#"><large ><i class="bi bi-trash-fill"></i></large></a>
+                                                                        </div>
+                                                                        <div class="col-md-6"> -->
+                                                                            <!-- <p id="p"><b>< %= val.fullName%></b>,&nbsp;< %= val.house +', '+ val.post +', ' +val.pin+','+ val.city +',' +val.district+', '+val.state   %></p> -->
+                                                                        <!-- </div>
+                                                                        <a class="text-success text-lg-end text-decoration-none" data-toggle="modal" data-target="#exampleModal"  href="#"><small ><i class="bi bi-pencil-square"></i> Edit</small></a>
+                                                                    </div>
+                                                                </a>
+                                                        < % }) %>
+                                                
+                                                        </div>
+                                                    </div>
+                                                </div> -->
+
+                                                <div class="border p-2 mt-2 " id="">
+                                                    <div id="addressList">
+                    
+                                                        <h5 class="text-dark border-bottom py-2 mb-2 ">Saved Addresses</h5>
+                                                        <!-- < % if(user.addressData.length==0){ %>
+                                                            <h3 class="text-dark text-center">No Address Avaliable</h3>
+                                                            <p class="text-muted text-center"> Add new address</p>
+                                                            < % }else{ %> -->
+                                                               <% user.addressData.forEach((val)=>{ %>
+                                                                    <a  class="text-decoration-none text-dark "  data-bs-toggle="modal" data-bs-target="#accountCreationModal">
+                                                                        <div class="card p-3 bg-light my-2"  id="<%= val.id %>item">
+                                                                            <div class="d-flex justify-content-between">
+                                                                               
+                                                                                <a class="text-danger text-lg-end text-decoration-none"  onclick="deleteaddress('<%= val._id %>')" href="#"><large ><i class="bi bi-trash"></i></large></a>
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <p id="p"><b><%= val.fullName%></b>,&nbsp;<%= val.house +', '+ val.post +', ' +val.pin+','+ val.city +',' +val.district+', '+val.state   %></p>
+                                                                            </div>
+                                                                            <a class="text-success text-lg-end text-decoration-none" data-toggle="modal" data-target="#exampleModal" onclick="editaddress('<%= val._id %>')" href="#"><small ><i class="bi bi-pencil-square"></i> Edit</small></a>
+                                                                        </div>
+                                                                    </a>
+                                                            <% }) %>
+                                                        <!-- < % } %> -->
+                                                    </div>
+
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<%- include('../user/layouts/userfooter.ejs') -%>
+    <script>
+        function addaddress(){
+            //console.log("INSIDE");
+            document.getElementById("actionmodel").reset();
+            document.getElementById("actionmodel").setAttribute('action','/addaddress')
+        }
+    function editaddress(id) {
+      $.ajax({
+      type: "POST",
+      url: "/editaddress",
+     data: {id},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) {
+
+    if(data=="LOGIN FIRST"){
+    console.log("SWEET");
+                Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Login first!',
+      footer: '<a href="/login">Go to login</a>'
+      })
+      }
+
+    // console.log(data,"data"); 
+    
+      $('#actionmodel').attr('action','updateaddress/'+data._id)
+      $('#name').val(data.fullName)
+      $('#house').val(data.house)
+      $('#post').val(data.post)
+      $('#city').val(data.city)
+      $('#district').val(data.district)
+      $('#state').val(data.state)
+      $('#pin').val(data.pin)
+      $('#Phone').val(data.phone)})
+      
+    }
+    </script>
+
+
+
+<script>
+    function deleteaddress(id) {
+   console.log("HELLO");
+      Swal.fire({
+title: 'Are you sure?',
+text: "You won't be able to revert this!",
+icon: 'warning',
+showCancelButton: true,
+confirmButtonColor: '#3085d6',
+cancelButtonColor: '#d33',
+confirmButtonText: 'Yes, delete it!'
+}).then((result) => {
+if (result.isConfirmed) {
+  
+  $.ajax({
+      type: "POST",
+      url: "/deleteaddress",
+     data: {id},
+     dataType: "json",
+    encode: true,
+    }).done(function (data) { 
+        $('#'+id+'item').remove()
+      Swal.fire(
+    'removed!',
+    'This Address has been removed.',
+    'success'
+  )
+    });
+  }
+  })
+  }
+  </script>
+
+
+
+

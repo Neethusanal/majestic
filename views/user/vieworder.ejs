@@ -1,0 +1,160 @@
+<%- include('../user/layouts/userheader.ejs') -%>
+
+
+
+    <div class=" container p-t-200  ">
+<h2 class="text-dark">Order Details</h2>
+
+        <div class="card shadow-0 border mb-4 m-t-20 border-100 ">
+            <%orderData.products.forEach(function(val){%> 
+                <div class="card-body">
+
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <img src="/uploads/<%= val.productid.image[0] %> " height="100" widht="100" alt="IMG">
+                        </div>
+                        <div class="col-md-4 text-center d-flex justify-content-center align-items-center">
+                            <p class="text-muted mb-0">
+                                <%=val.productid.productName %>
+                            </p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                            <p class="text-muted mb-0 small">
+                                <%= val.quantity%>
+                            </p>
+                            </p>
+                        </div>
+                        <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                            <p class="text-muted mb-0 small"> Rs <%= val.price %>
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                </div>
+
+                <%})%>
+
+
+
+        </div>
+
+
+        <div class="card shadow-0 border mb-4 m-t-20 ">
+            <h2 class="text-dark">Delivery Address</h2>
+            <div class="card-body">
+                
+                <div class="row">
+                    <%= orderData.addressData.fullName%><br>
+                        <%= orderData.addressData.house%><br>
+                            <%= orderData.addressData.post%><br>
+                                <%= orderData.addressData.city%><br>
+                                    <%= orderData.addressData.district%><br>
+                                        <%= orderData.addressData.pin%><br>
+                                            <%= orderData.addressData.phone%>
+
+
+
+                </div>
+
+
+
+
+
+
+            </div>
+        
+        </div>
+ 
+
+        <div class="card shadow-0 border mb-4 m-t-20 ">
+            <h2 class="m-t-4 text-dark"> Bill Details</h2>
+            <div class="card-body">
+               
+                <div class="row">
+                   
+                    <table class="table">
+                        
+                        
+                        <tbody>
+                          <tr>
+                            <th >Payment Id:</th>
+                            <td><%=orderData.payment.payment_id%></td>
+                            
+                          </tr>
+                          <tr>
+                            <th>Payment Method</th>
+                            <td><%=orderData.payment.payment_method%></td>
+                            
+                          </tr>
+
+                          <tr>
+                            <th>Items:</th>
+                            <td><%=orderData.products.length%></td>
+                           </tr>
+                          <tr>
+                            <th>Delivery Status:</th>
+                            <% if (orderData.delivery_status.cancelled.state){%>
+                                <td>Cancelled</td>
+                           
+                            <% } else if (orderData.delivery_status. ordered.state){%>
+                            <td> Ordered</td>
+                            <%} else if(orderData.delivery_status.shipped.state){%>
+                                <td>shipped</td>
+                            <%} else if (orderData.delivery_status.out_for_delivery.state){%>
+                                <td>out for Delivery</td>
+                            <%} else if(orderData.delivey_status.delivered.state){%>
+                                <td>Delivered</td>
+                             <%}%>
+                           </tr>
+
+                           <tr>
+                            <th>Bill Amount:</th>
+                            <td><%=orderData.billamount%></td>
+                           </tr>
+
+                          
+                        </tbody>
+                      </table>
+
+                      <div>
+                        <button type="button" onclick="cancelOrder('<%=orderData._id%>')" class="btn btn-dark"
+                                                                data-toggle="modal" data-target="#exampleModal" >
+                                                            Cancel Order
+                                                            </button></a>
+                      </div>
+
+                </div>
+
+
+
+                
+
+            </div>
+        
+        </div>
+    </div>
+    <script>
+       function cancelOrder(id) {
+        console.log(id + "CANCEL");
+        $.ajax({
+          type: "POST",
+          url: "/cancelOrder",
+          data: {
+            id
+          },
+          dataType: "json",
+          encode: true,
+        }).done(function(data) {
+          if (data == 'Ordercanceled') {
+            Swal.fire(
+              'removed!',
+              'This Order has been canceled.',
+              'success'
+            )
+            resHTML = '<h5 class="text-success text-center border border-success">Order delivered</h5>'
+            $('#cancel').html(resHTML)
+          }
+        });
+      }
+    </script>

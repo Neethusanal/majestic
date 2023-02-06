@@ -1,0 +1,62 @@
+<%- include('../admin/layouts/adminheader.ejs') -%>
+<div class="col-lg">
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title"> Edit Banner</div>
+        <hr />
+        <form 
+          method="post"
+          action="/admin/editbanner/<%=banner._id%>"
+          enctype="multipart/form-data">
+   
+          <div class="form-group">
+            <label for="input-4">Banner Name</label>
+            <input
+              class="form-control"
+              id="input-4"
+              type="text"
+              name="bannerName"
+              value="<%=banner.bannerName%>"
+              required
+             
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="input-5">Details</label>
+            <input
+              class="form-control"
+              id="input-5"
+              type="text"
+              name="description"
+            value="<%=banner.description%>"
+              required
+            
+
+            />
+          </div>
+  
+          <div class="form-group">
+            <label for="input-5">Image</label>
+            <input
+              type="file"
+              name="image"
+              class="form-control"
+              multiple
+              id="input-5"
+           
+           
+              value="<%=banner.image%>"
+            />
+          </div>
+   
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary px-5">Edit Banner</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  
+
+<%- include('../admin/layouts/adminfooter.ejs') -%>
