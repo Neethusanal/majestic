@@ -76,6 +76,8 @@ router.get('/disable/:id',controller.disableBanner);
 
 router.get('/vieworder',controller.viewOrder)
 router.get('/ordersummary/:id',controller.getOrderDetails)
+router.get('/invoice/:id',controller.invoice);
+router.get('/salesreport',controller.salesReport)
 
 
 
@@ -87,7 +89,7 @@ router.get('/ordersummary/:id',controller.getOrderDetails)
 //logout
 
 
-router.get("/adminlogout", controller.logout)
+router.get("/adminlogout", controller.logout);
 
 //POST,
 
@@ -109,6 +111,7 @@ router.post('/addbanner',upload.array("image",10),controller.addBanner);
 router.post('/deletebanner/:id',controller.deletebanner);
 router.post('/editbanner/:id',upload.single("image"),controller.editBanner)
 router.post('/deliverystatus/:id',controller.deliveryStatus)
+router.post('/salesdetails',controller.salesDetails)
 
 
 

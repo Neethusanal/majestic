@@ -11,10 +11,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        
+
                                         <th scope="col">ORDERED ID</th>
                                         <th scope="col">ORDER DATE</th>
-                                        
+
                                         <th scope="col">ORDER STATUS</th>
                                         <th scope="col">ORDER ITEMS</th>
                                         <th scope="col">BILL AMOUNT</th>
@@ -22,19 +22,31 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                 <% order.forEach(function(data) {%>
-                                    <tr>
-                                    <tr>
-                                        <td><%= data._id  %></td>
-                                        <td><%= data.ordered_date.getDate() %>/<%= data.ordered_date.getMonth()+1 %>/<%= data.ordered_date.getFullYear() %></td> 
-                                        
-                                        <td><%= data.order_status %></td>
-                                        <td><%=data.products.length%></td>
-                                        <td><%= data.billamount  %></td>
-                                        
-                                         <td><a href="vieworder/<%= data._id%>"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
-                                    </tr>
-                                    <%})%>
+                                    <% order.forEach(function(data) {%>
+                                        <tr>
+                                        <tr>
+                                            <td>
+                                                <%= data._id %>
+                                            </td>
+                                            <td>
+                                                <%= data.ordered_date.getDate() %>/<%= data.ordered_date.getMonth()+1 %>
+                                                        /<%= data.ordered_date.getFullYear() %>
+                                            </td>
+
+                                            <td>
+                                                <%= data.order_status %>
+                                            </td>
+                                            <td>
+                                                <%=data.products.length%>
+                                            </td>
+                                            <td>
+                                                <%= data.billamount %>
+                                            </td>
+
+                                            <td><a href="vieworder/<%= data._id%>"><i class="fa fa-eye"
+                                                        aria-hidden="true"></i></a></td>
+                                        </tr>
+                                        <%})%>
                                 </tbody>
                             </table>
                         </div>
@@ -44,7 +56,7 @@
         </div><!--End Row-->
     </div>
 
-</div>
+    </div>
 
 
-        <%- include('../user/layouts/userfooter.ejs') -%>
+    <%- include('../user/layouts/userfooter.ejs') -%>

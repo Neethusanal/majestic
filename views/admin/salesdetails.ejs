@@ -1,12 +1,10 @@
-
-
-
 <%- include('../admin/layouts/adminheader.ejs') -%>
-
 <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Order Management</h5>
+
+        
+        <h5 class="card-title">sales Details</h5>
         <div class="table-responsive">
         <table class="table table-bordered">
           <thead>
@@ -18,8 +16,9 @@
               <th scope="col">Items</th>
               <th scope="col">OrderedDate</th>
               <th scope="col">Payment Mode</th>
-              <th>Delivery Status:</th>
-              <th scope colspan="2">Action</th>
+              <th>Bill Amount:</th>
+              <th>Discount:</th>
+              <th>total</th>
               
               
               
@@ -28,33 +27,26 @@
           </thead>
           <tbody>
             <tr>
-              <% order.forEach( function(order,index) { %>
+                <% let total= 0 %>
+              <!-- <%  salesdetails.forEach( function(order,index) { %> -->
               <th scope="row"><%=index+1%></th>
               <td><%=order._id%></td>
-              <td><%= order.userId.fullName%></td>
+              <td><%= order.userid[0].fullName%></td>
               <td><%=order.products.length%></td>
               <td><%= order.ordered_date.getDate()+ '-' + (order.ordered_date.getMonth()+1) +'-'+
                 order.ordered_date.getFullYear()%></td>
               <td><%=order.payment.payment_method%></td>
-            <td>
-              <% if (order.delivery_status.cancelled.state){%>
-                <p>Cancelled</p>
-                <%} else if(order.delivery_status.delivered.state){%>
-                  <p>Delivered</p>
-               <%} else if (order.delivery_status.out_for_delivery.state){%>
-                <p>out for Delivery</p>
-                <%} else if(order.delivery_status.shipped.state){%>
-                <p>shipped</p>
-            <% } else if (order.delivery_status. ordered.state){%>
-              <p> Ordered</p>
-                <%}%>
-            </td>
-             
-            
-              <td> <a href="ordersummary/<%=order._id%>"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
-              <td> <a href="invoice/<%=order._id%>"><i class="bi bi-receipt"></i></a></td>
+              <td><%= order.billamount %> </td>
+              <td><%= order.coupon.discount %> </td>
+              <td>
+                <%= (Math.round(order.billamount-(order.billamount*order.coupon.discount)/100)) %>
+              </td>
             </tr>
-            <% } )%>
+           
+            <% total=total+(Math.round(order.billamount-(order.billamount*order.coupon.discount)/100))%> 
+       <%});%>
+            </tr>
+        
           </tbody>
         </table>
       </div>
@@ -62,4 +54,6 @@
     </div>
   </div>
 </div><!--End Row-->
+
+
 <%- include('../admin/layouts/adminfooter.ejs') -%>

@@ -11,8 +11,8 @@ const bcrypt = require("bcryptjs");
 
 const { request } = require("express");
 const orderModel = require("../models/orderModel");
-const {handleDuplicate}=require('../Error/dbError')
-const sharp=require('sharp')
+const { handleDuplicate } = require('../Error/dbError')
+const sharp = require('sharp')
 module.exports = {
   //********************************************Login Page************************************************************ */
 
@@ -39,7 +39,7 @@ module.exports = {
       if (!admin) {
         console.log("not admin")
         return res.redirect("/admin/adminlogin");
-      }else{
+      } else {
         req.session.doLogin = true;
         req.session.admin = admin.userName;
         return res.redirect("/admin/adminhome");
@@ -49,15 +49,58 @@ module.exports = {
       //       if (!isMatch) {
       //           return res.redirect('/admin/adminlogin')
       //       }
-       
+
     } catch (err) {
       next(err);
     }
   },
 
   // ***************************************************************************************************************
-  Home: (req, res) => {
-    res.render("admin/adminhome" );
+  Home: async (req, res, next) => {
+    try {
+      const startOfMonth = new Date();
+      startOfMonth.setDate(1);
+      startOfMonth.setHours(0, 0, 0, 0);
+      const endOfMonth = new Date();
+      endOfMonth.setMonth(endOfMonth.getMonth() + 1);
+      endOfMonth.setDate(0);
+      endOfMonth.setHours(23, 59, 59, 999);
+
+      let salesChart = await orderModel.aggregate([
+        {
+          $match: {
+            order_status: { $ne: "pending" },
+            ordered_date: {
+              $gte: startOfMonth,
+              $lt: endOfMonth,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$ordered_date" } },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $sort: { _id: 1 },
+        },
+      ]);
+      console.log(salesChart)
+      const users = await UserModel.find({}).count();
+      console.log(users, "jj")
+      const products = await ProductModel.find({}).count()
+      console.log(products, "ppp")
+      const categories = await CategoryModel.find({}).count()
+      const order = await orderModel.find({ order_status: { $ne: "pending" } }).count()
+      let orders = await orderModel.find({ order_status: { $ne: "pending" } }).populate('products.productid').populate('userId').sort({ ordered_date: -1 }).limit(10)
+
+      res.render("admin/adminhome", { users, products, categories, order, orders, salesChart });
+
+    } catch (err) {
+      next(err)
+    }
+
   },
   // *********************************************************************************************************************
   getallUser: async (req, res, next) => {
@@ -112,29 +155,29 @@ module.exports = {
 
   addCategorypage: (req, res, next) => {
     try {
-      res.render("admin/addcategory",{errors:''});
+      res.render("admin/addcategory", { errors: '' });
     } catch (err) {
       next(err);
     }
   },
 
-  addCategory: async(req, res) => {
+  addCategory: async (req, res) => {
     try {
       const newCategory = CategoryModel({
         categoryName: req.body.categoryName,
       });
-   const newItem = await   newCategory.save()
-   if(!newItem){
-    res.redirect("/admin/viewcategory");
-   }
+      const newItem = await newCategory.save()
+      if (!newItem) {
+        res.redirect("/admin/viewcategory");
+      }
     } catch (err) {
-      const error={...err};
+      const error = { ...err };
       console.log(error.code)
       let errors
-      if(error.code===11000){
+      if (error.code === 11000) {
 
-        errors=handleDuplicate(error)
-        res.render('admin/addcategory',{errors})
+        errors = handleDuplicate(error)
+        res.render('admin/addcategory', { errors })
       }
     }
   },
@@ -212,14 +255,14 @@ module.exports = {
       const category = await CategoryModel.find({ deleted: false });
       const product = await ProductModel.find().populate("category");
       console.log(product);
-      res.render("admin/addproduct", { category,product });
+      res.render("admin/addproduct", { category, product });
     } catch (err) {
       next(err);
     }
   },
   //add products
   addProduct: async (req, res, next) => {
-    const {productName,category,description,price, quantity,instock,stockvalue,image} = req.body;
+    const { productName, category, description, price, quantity, instock, stockvalue, image } = req.body;
     console.log(req.body);
     try {
       //  const imageURL = req.files
@@ -240,7 +283,7 @@ module.exports = {
         quantity,
         image: image,
         instock,
-        stockvalue:stockvalue
+        stockvalue: stockvalue
       });
       newproduct.save().then(() => {
         res.redirect("/admin/viewproducts");
@@ -280,56 +323,56 @@ module.exports = {
       const category = req.body.category;
       const id = req.params.id;
       console.log(id)
-      const stock = req.body.instock == 'true' ?  true : false 
-      console.log(stock,'stock');
-    if(req.files.length>0){
-     //const image = req.files.map((file) => file.filename);
+      const stock = req.body.instock == 'true' ? true : false
+      console.log(stock, 'stock');
+      if (req.files.length > 0) {
+        //const image = req.files.map((file) => file.filename);
 
-     let image = []
-     let promises = [];
-     req.files.forEach((file) => {
-       promises.push(new Promise((resolve, reject) => {
-         const filename = file.originalname.replace(/\..+$/, '')
-         const newFilename = `bmart-${filename}-${Date.now()}.jpeg`
-         sharp(file.path)
-           .resize({ width: 900, height: 900 })
-           .jpeg({
-             quality: 100,
-             chromaSubsampling: '4:4:4'
-           })
-           .toFile(`public/uploads/${newFilename}`)
-         image.push(newFilename)
-         console.log(newFilename);
-         resolve();
-       }));
-  
-     })
-      
+        let image = []
+        let promises = [];
+        req.files.forEach((file) => {
+          promises.push(new Promise((resolve, reject) => {
+            const filename = file.originalname.replace(/\..+$/, '')
+            const newFilename = `bmart-${filename}-${Date.now()}.jpeg`
+            sharp(file.path)
+              .resize({ width: 900, height: 900 })
+              .jpeg({
+                quality: 100,
+                chromaSubsampling: '4:4:4'
+              })
+              .toFile(`public/uploads/${newFilename}`)
+            image.push(newFilename)
+            console.log(newFilename);
+            resolve();
+          }));
 
-   //console.log(image,"dfghj")
-  
-     
-      const product = await ProductModel.findByIdAndUpdate(
-        { _id: id },
-        {
-          $set: {
-            productName: req.body.productName,
-            category: category._id,
-            description: req.body.description,
-            image: image,
-            price: req.body.price,
-            quantity: req.body.quantity,
-            instock: stock,
-            stockvalue:req.body.stockvalue
-          },
-        }
-      );
+        })
 
-      product.save().then(() => {
-        res.redirect("/admin/viewproducts");
-      });
-      
-    }
+
+        //console.log(image,"dfghj")
+
+
+        const product = await ProductModel.findByIdAndUpdate(
+          { _id: id },
+          {
+            $set: {
+              productName: req.body.productName,
+              category: category._id,
+              description: req.body.description,
+              image: image,
+              price: req.body.price,
+              quantity: req.body.quantity,
+              instock: stock,
+              stockvalue: req.body.stockvalue
+            },
+          }
+        );
+
+        product.save().then(() => {
+          res.redirect("/admin/viewproducts");
+        });
+
+      }
     } catch (err) {
       next(err);
     }
@@ -397,14 +440,14 @@ module.exports = {
       });
       coupen.save().then(() => {
         res.redirect("/admin/viewcoupen");
-      }).catch(error=>{
-         let errors
-         if(error.code===11000){
+      }).catch(error => {
+        let errors
+        if (error.code === 11000) {
           errors.coupenDuplicate(error)
-          res.render('admin/addcoupen',{errors})
-         }
+          res.render('admin/addcoupen', { errors })
+        }
       })
-      
+
     } catch (err) {
       next(err);
     }
@@ -478,33 +521,7 @@ module.exports = {
     });
   },
 
-  //  editBanner: async (req, res, next) => {
-  //   console.log(req.body);
-  //   try {
 
-  //     const id = req.params.id;
-  //     const images = req.file
-  //     const { bannerName,description,image}=req.body
-  //     //await BannerModel.findByIdAndUpdate({ _id: req.params.id }, { $set: { image: images } })
-
-  //     BannerModel.findByIdAndUpdate(
-  //       { _id: id },
-  //       {
-  //         $set: {
-  //           bannerName,
-  //           description,
-  //           image:images
-
-  //         }
-  //       }
-
-  //     ).then(() => {
-  //       res.redirect("/admin/viewbanner");
-  //     });
-  //   } catch (err) {
-  //     next(err);
-  //   }
-  // },
   editBanner: async (req, res, next) => {
     try {
       console.log(req.body.image);
@@ -543,12 +560,12 @@ module.exports = {
       const id = req.params.id;
       await BannerModel.updateOne(
         { _id: id },
-        { $set: { status: true} }
+        { $set: { status: true } }
       ).then(() => {
         res.redirect("/admin/viewbanner");
       });
     } catch (err) {
-      next(err);
+      next(error);
     }
   },
   disableBanner: async (req, res) => {
@@ -561,40 +578,40 @@ module.exports = {
         res.redirect("/admin/viewbanner");
       });
     } catch (err) {
-      next(err);
+      next(error);
     }
   },
-  viewOrder:async(req,res,next)=>{
-    try{
-      const order=await orderModel.find({order_status:'completed'}).populate('userId').sort({ ordered_date: -1 });
-      res.render('admin/vieworder',{order})
+  viewOrder: async (req, res, next) => {
+    try {
+      const order = await orderModel.find({ order_status: 'completed' }).populate('userId').sort({ ordered_date: -1 });
+      res.render('admin/vieworder', { order })
 
-    }catch(err){
-      next(err)
+    } catch (err) {
+      next(error)
     }
   },
 
-  getOrderDetails:async(req,res,next)=>{
-    try{
+  getOrderDetails: async (req, res, next) => {
+    try {
 
-      const id=req.params.id
+      const id = req.params.id
       console.log(id)
-      const order= await orderModel.findById({_id:id}).populate('products.productid')
-      console.log(order,"*********************************************************")
-      res.render('admin/ordersummary',{order})
-      
+      const order = await orderModel.findById({ _id: id }).populate('products.productid')
+      console.log(order, "*********************************************************")
+      res.render('admin/ordersummary', { order })
 
-    }catch(err){
-      next(err)
+
+    } catch (err) {
+      next(error)
     }
 
   },
-  deliveryStatus:async(req,res)=>{
-    try{
+  deliveryStatus: async (req, res) => {
+    try {
       console.log(req.body)
-      let orderid=req.params.id
+      let orderid = req.params.id
       console.log(orderid)
-      if (req.body.deliveryStatus =='shipped') {
+      if (req.body.deliveryStatus == 'shipped') {
         orderModel.updateOne({ _id: orderid }, { $set: { 'delivery_status.shipped.state': true, 'delivery_status.shipped.date': Date.now() } }).then((data) => {
           res.redirect('/admin/ordersummary/' + orderid)
         })
@@ -608,8 +625,66 @@ module.exports = {
         })
       }
 
-    }catch(err)
-    {
+    } catch (err) {
+      next(error)
+    }
+
+  },
+  invoice: async (req, res, next) => {
+    try {
+      console.log(req.params.id)
+      let invoice = await orderModel.findOne({ _id: req.params.id })
+        .populate("products.productid").populate('userId')
+      res.render("admin/invoice", { invoice })
+      console.log(invoice)
+
+
+
+    } catch (err) {
+      next(err)
+    }
+  },
+
+  salesReport: (req, res, next) => {
+    try {
+      console.log("salesreport")
+      res.render('admin/salesreport')
+
+    } catch (err) {
+      next(err)
+    }
+
+  },
+
+  salesDetails:async(req,res,next)=>{
+    try{
+      console.log(req.body)
+      let salesdetails = await orderModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { order_status: "completed" },
+              { "delivery_status.delivered.state": true },
+              { ordered_date: { $gt: new Date(req.body.from) } },
+              { ordered_date: { $lt: new Date(req.body.to) } },
+            ],
+          },
+        },
+        {
+          $lookup: {
+            from: "userdatas",
+            localField: "userId",
+            foreignField: "_id",
+            as: "userid",
+          },
+        },
+        { $sort: { ordered_date: -1 } },
+      ]);
+      console.log(salesdetails)
+      res.render("admin/salesdetails", {salesdetails});
+
+    }catch(err){
+      console.log(error)
       next(err)
     }
 
@@ -621,8 +696,8 @@ module.exports = {
       req.session.destroy();
       res.redirect("/admin");
     } catch (err) {
-      next(err);
+      next(createError(404));
     }
   },
-  
+
 };
