@@ -13,11 +13,13 @@
                                     <tr>
 
                                         <th scope="col">ORDERED ID</th>
+                                        <th scope="col">PRODUCT NAME</th>
                                         <th scope="col">ORDER DATE</th>
 
                                         <th scope="col">ORDER STATUS</th>
                                         <th scope="col">ORDER ITEMS</th>
                                         <th scope="col">BILL AMOUNT</th>
+                                        <th scope="col">AFTER DISCOUNT</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -28,6 +30,13 @@
                                             <td>
                                                 <%= data._id %>
                                             </td>
+
+                                            <td>
+                                                <% data.products.forEach(function(x){%>
+                                                <%= x.productid.productName %><br>
+                                                <%})%>
+                                            </td>
+                                            
                                             <td>
                                                 <%= data.ordered_date.getDate() %>/<%= data.ordered_date.getMonth()+1 %>
                                                         /<%= data.ordered_date.getFullYear() %>
@@ -41,6 +50,11 @@
                                             </td>
                                             <td>
                                                 <%= data.billamount %>
+                                            </td>
+                                            <td>
+                                                <%=
+                                                (Math.round(data.billamount-(data.billamount*data.coupon.discount)/100))
+                                                %></p>
                                             </td>
 
                                             <td><a href="vieworder/<%= data._id%>"><i class="fa fa-eye"

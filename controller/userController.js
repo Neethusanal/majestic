@@ -16,18 +16,21 @@ const { findOneAndUpdate, castObject } = require("../models/userModel");
 const ajaxauth = require("../Middleware/Ajaxauth");
 const orderModel = require("../models/orderModel");
 const coupenModel = require("../models/coupenModel");
-const Razorpay=require('razorpay');
-const crypto=require('crypto');
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
 const productModel = require("../models/productModel");
-
+const WishlistModel=require('../models/wishlistModel')
 
 require("dotenv").config();
 
 //const mailcheck=require("../Middleware/nodemailer")
 //Razorpay
-var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
+var instance = new Razorpay({
+  key_id: process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET,
+});
 
-// paymentId = "pay_JqLHMVryzMEafT"  
+// paymentId = "pay_JqLHMVryzMEafT"
 
 // instance.payments.fetch(paymentId,{"expand[]":"card"})
 
@@ -43,7 +46,6 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-
 var otp = Math.random();
 otp = otp * 1000000;
 otp = parseInt(otp);
@@ -53,7 +55,7 @@ module.exports = {
   Home: async (req, res, next) => {
     try {
       let user = req.session.user;
-      const banner = await BannerModel.find({status:true}).limit(3);
+      const banner = await BannerModel.find({ status: true }).limit(3);
       const product = await ProductModel.find();
       const categories = await CategoryModel.find();
 
@@ -164,7 +166,7 @@ module.exports = {
       // res.render("user/home");
       res.redirect("/");
     } else {
-      res.render("user/login", {status:true });
+      res.render("user/login", { status: true });
     }
   },
 
@@ -203,15 +205,15 @@ module.exports = {
         email: email,
         status: "true",
       });
-  
+
       if (!user) {
-        return res.render("user/login",{status:'true'});
-        console.log("dfghj") 
+        return res.render("user/login", { status: "true" });
+        console.log("dfghj");
       }
-console.log("tttttttttt")
+      console.log("tttttttttt");
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.redirect("/user/login",{status:true});
+        return res.redirect("/user/login", { status: true });
       }
       // if (user.status == false) {
       //   return res.render("user/login");
@@ -310,17 +312,16 @@ console.log("tttttttttt")
 
   getallProducts: async (req, res, next) => {
     try {
+      let user = req.session.user;
+      const id = req.params.id;
+      const product = req.res;
+      const category = await CategoryModel.find();
 
-          let user = req.session.user;
-          const id = req.params.id;
-          const product = req.res;
-          const category = await CategoryModel.find();
-    
-          res.render("user/shop", { user, product, category });
-        } catch (err) {
-          next(err);
-        }
-      },
+      res.render("user/shop", { user, product, category });
+    } catch (err) {
+      next(err);
+    }
+  },
   // getallProducts:async(req,res,next)=>{
 
   // try{
@@ -382,8 +383,11 @@ console.log("tttttttttt")
       let cart = await CartModel.findOne({ userId: user_id }).populate(
         "products.productid"
       );
-      //console.log();
-      res.render("user/shoppingcart", { user, cart });
+      if (!cart) {
+        cart = { products: [] };
+      }
+
+      res.render("user/shoppingcart", { user, cart ,message:req.session.message});
     } catch (err) {
       //console.log(error);
       next(err);
@@ -694,173 +698,211 @@ console.log("tttttttttt")
     try {
       const user = req.session.user._id;
       console.log(req.body, "Data which is getting from form");
-      const address = await UserModel.findOne({ _id: user });
-      //  console.log(address)
-      address.addressData.forEach(async (add) => {
-        // console.log(add+"ADDRESS__**********");
-        
-        if (add._id.toString() == req.body.address.toString()) {
-      if (req.body.flexRadioDefault == "COD") {
-        if (req.params.id) {
-          //console.log(req.body.address+"address id")
-        
-              const order = await orderModel.findOne({
-                _id: req.params.id,
-                userId: req.session.user._id,
-                order_status: "pending",
-              });
 
-              console.log(order, "order----------");
-              if (order) {
-                orderModel
-                  .updateOne(
-                    { _id: req.params.id },
-                    {
-                      $set: {
-                        addressData: {
-                          fullName: add.fullName,
-                          house: add.house,
-                          post: add.post,
-                          pin: add.pin,
-                          city: add.city,
-                          district: add.district,
-                          state: add.state,
+      const address = await UserModel.findOne({ _id: user });
+
+      const order = await orderModel.findOne({
+        _id: req.params.id,
+        userId: req.session.user._id,
+        order_status: "pending",
+      }).populate('products.productid')
+      const isStockAvailable = order.products.every((product) => {
+        return product.quantity <= product.productid.stockvalue;
+      });
+      if (!isStockAvailable) {
+        console.log(isStockAvailable, "+++-----");
+        let outOfStockProducts = [];
+        order.products.forEach((product) => {
+          if (product.quantity > product.productid.stockvalue) {
+            outOfStockProducts.push(product.productid.productName);
+          }
+        });
+        
+        req.session.message = {
+          type: "danger",
+          message: `${outOfStockProducts} is out of stock`,
+        };
+        res.json({ outOfStock: true });
+      } else {
+        console.log("out o asdfghj");
+        order.products.forEach(async (product) => {
+          console.log("out of stockkkkkkkk");
+          new_stock = product.productid.stockvalue - product.quantity;
+          await productModel.findByIdAndUpdate(
+            { _id: product.productid._id },
+            { $set: { stockvalue: new_stock } }
+          );
+        });
+
+        address.addressData.forEach(async (add) => {
+          if (add._id.toString() == req.body.address.toString()) {
+            if (req.body.flexRadioDefault == "COD") {
+              if (req.params.id) {
+                //console.log(req.body.address+"address id")
+
+                // const order = await orderModel.findOne({
+                //   _id: req.params.id,
+                //   userId: req.session.user._id,
+                //   order_status: "pending",
+                // });
+
+                console.log(order, "order----------");
+                if (order) {
+                  orderModel
+                    .updateOne(
+                      { _id: req.params.id },
+                      {
+                        $set: {
+                          addressData: {
+                            fullName: add.fullName,
+                            house: add.house,
+                            post: add.post,
+                            pin: add.pin,
+                            city: add.city,
+                            district: add.district,
+                            state: add.state,
+                          },
+                          order_status: "completed",
+                          "payment.payment_id": "COD_" + req.params.id,
+                          "payment.payment_order_id": "COD_noOID",
+                          "payment.payment_method": "cash_on_delivery",
+                          "delivery_status.ordered.state": true,
+                          "delivery_status.ordered.date": Date.now(),
                         },
-                        order_status: "completed",
-                        "payment.payment_id": "COD_" + req.params.id,
-                        "payment.payment_order_id": "COD_noOID",
-                        "payment.payment_method": "cash_on_delivery",
-                        "delivery_status.ordered.state": true,
-                        "delivery_status.ordered.date": Date.now(),
-                      },
-                    }
-                  )
-                  .then(async () => {
-                    await coupenModel.updateOne(
-                      { coupenCode: "order.coupon.code" },
-                      { $addToSet: { couponUser: req.session.user._id } }
-                    );
-                    await UserModel.updateOne(
-                      { _id: req.session.user._id },
-                      { $set: { cart: [] } }
-                    );
-                    res.json("COD");
-                  });
+                      }
+                    )
+                    .then(async () => {
+                      await coupenModel.updateOne(
+                        { coupenCode: "order.coupon.code" },
+                        { $addToSet: { couponUser: req.session.user._id } }
+                      );
+                      await UserModel.updateOne(
+                        { _id: req.session.user._id },
+                        { $set: { cart: [] } }
+                      );
+                      res.json("COD");
+                    });
+                }
+
+                // console.log(address+"ADRESSSSS________________");
+                // console.log(req.params.id,"dfgh");
               }
-           
-          
-          // console.log(address+"ADRESSSSS________________");
-          // console.log(req.params.id,"dfgh");
-        }
-      }
-      else{
-        if(req.params.id){
-          console.log(req.params.id)
-          const order=await orderModel.findOne({_id:req.params.id,userId:req.session.user._id,order_status:"pending"})
-          if(order)
-          {
-            orderModel.updateOne({_id:req.params.id},{
-              $set:{
-                addressData:
-                {
-                          fullName: add.fullName,
-                          house: add.house,
-                          post: add.post,
-                          pin: add.pin,
-                          city: add.city,
-                          district: add.district,
-                          state: add.state,
+            } else {
+              if (req.params.id) {
+                // console.log(req.params.id)
+                // const order=await orderModel.findOne({_id:req.params.id,userId:req.session.user._id,order_status:"pending"})
+                if (order) {
+                  orderModel
+                    .updateOne(
+                      { _id: req.params.id },
+                      {
+                        $set: {
+                          addressData: {
+                            fullName: add.fullName,
+                            house: add.house,
+                            post: add.post,
+                            pin: add.pin,
+                            city: add.city,
+                            district: add.district,
+                            state: add.state,
+                          },
+                        },
+                      }
+                    )
+                    .then(async () => {
+                      await UserModel.updateOne(
+                        { _id: req.session.user._id },
+                        { $set: { cart: [] } }
+                      );
+                      console.log("inside then function ");
+                      let total =(Math.round(order.billamount-(order.billamount*order.coupon.discount)/100))*100
+                      console.log("sdfghj...................");
+                      instance.orders
+                        .create({
+                          amount: total,
+                          currency: "INR",
+                          receipt: "" + order._id,
+                        })
+                        .then((order) => {
+                          res.json({ field: order, key: process.env.KEY_ID });
+                        });
+                    })
+                    .catch((err) => {
+                      next(err);
+                    });
                 }
               }
-            })
-            .then(async()=>{
-              await UserModel.updateOne({_id:req.session.user._id},{$set:{cart:[]}})
-              console.log("inside then function ")
-              let total=order.billamount*100;
-              console.log('sdfghj...................')
-              instance.orders.create({amount:total,currency:"INR",receipt:""+order._id})
-              .then((order)=>{
-                console.log(order,"asdfghjkl-------------------------")
-                res.json({field:order,key:process.env.KEY_ID})
-                
-              })
-            })
-            .catch((err)=>{
-              next(err)
-            })
+            }
           }
-        }
+        });
       }
-    }
-    });
     } catch (err) {
       next(err);
     }
   },
-  verifypayment:(req,res,next)=>{
+  verifypayment: (req, res, next) => {
     try {
-    
-      const response=JSON.parse(req.body.orders)
-      console.log(response)
-      let hamc=crypto.createHmac('sha256',process.env.KEY_SECRET )
-      hamc.update(response.raz_oid+'|'+response.raz_id)
-      hamc=hamc.digest('hex')
-      if(hamc==response.raz_sign){
+      const response = JSON.parse(req.body.orders);
+      console.log(response);
+      let hamc = crypto.createHmac("sha256", process.env.KEY_SECRET);
+      hamc.update(response.raz_oid + "|" + response.raz_id);
+      hamc = hamc.digest("hex");
+      if (hamc == response.raz_sign) {
         orderModel
-              .updateOne(
-                { _id: response.id },
-                {
-                  $set: {
-                    order_status:"completed",
-                    "payment.payment_status":"completed",
-                    "payment.payment_id": response.raz_id,
-                    "payment.payment_order_id":response.raz_oid,
-                    "payment.payment_method": "Online_payment",
-                    "delivery_status.ordered.state": true,
-                    "delivery_status.ordered.date": Date.now(),
-                  },
-                }
-              ).then(()=>{
-                res.json('ONLINEPAYMENT')
-              })
-      }else{
-        res.json('failed')
+          .updateOne(
+            { _id: response.id },
+            {
+              $set: {
+                order_status: "completed",
+                "payment.payment_status": "completed",
+                "payment.payment_id": response.raz_id,
+                "payment.payment_order_id": response.raz_oid,
+                "payment.payment_method": "Online_payment",
+                "delivery_status.ordered.state": true,
+                "delivery_status.ordered.date": Date.now(),
+              },
+            }
+          )
+          .then(() => {
+            res.json("ONLINEPAYMENT");
+          });
+      } else {
+        res.json("failed");
       }
-      
-      
     } catch (error) {
-      next(error)
+      next(error);
     }
   },
 
-  orderDetails: async(req, res, next) => {
+  orderDetails: async (req, res, next) => {
     try {
       let user = req.session.user;
-      let id=user._id
-     const order=await orderModel.find({userId:user._id,order_status:"completed"}).sort({ordered_date:-1})
-     //console.log(order+"ORDER DETIALS  ")
-      res.render("user/orderdetails", { user,order});
+      let id = user._id;
+      const order = await orderModel
+        .find({ userId: user._id, order_status: "completed" })
+        .sort({ ordered_date: -1 })
+        .populate("products.productid");
+
+      res.render("user/orderdetails", { user, order });
     } catch (err) {
       next(err);
     }
   },
 
-  viewOrder:async(req,res,next)=>{
-    try{
-      const user=req.session.user
-      const id=req.params.id
-      console.log(id,"---------------------------")
-      const orderData = await orderModel.findById({_id:id}).populate('products.productid')
-      console.log(orderData,"orderdata------------------")
-      
-      res.render('user/vieworder', {user , orderData})
+  viewOrder: async (req, res, next) => {
+    try {
+      const user = req.session.user;
+      const id = req.params.id;
 
+      const orderData = await orderModel
+        .findById({ _id: id })
+        .populate("products.productid");
+      console.log(orderData, "orderdata------------------");
 
-
-    }catch(err){
-      next(err)
+      res.render("user/vieworder", { user, orderData });
+    } catch (err) {
+      next(err);
     }
-
   },
 
   getuserProfile: async (req, res, next) => {
@@ -962,71 +1004,44 @@ console.log("tttttttttt")
       next(err);
     }
   },
-  searchProducts:async(req,res,next)=>{
-    try{
-      const key=req.params.key
-      let data= await ProductModel.find()
-      console.log(data)
-      {
-        $or:[
-          {
-            productName:{$regex:req.params.key}
-          },
-          {
-            categoryName:{$regex:req.params.key}
-          }
-        ]
-      }
 
-
-    }catch(err){
-      next(err)
+  aboutPage: (req, res) => {
+    try {
+      let user = req.session.user;
+      res.render("user/about", { user });
+    } catch (err) {
+      next(err);
     }
-
   },
-  aboutPage:(req,res)=>{
-
-    try{
-      let user=req.session.user
-      res.render("user/about",{user})
-
-    }catch(err){
-      next(err)
+  contactPage: (req, res) => {
+    try {
+      let user = req.session.user;
+      res.render("user/contact", { user });
+    } catch (err) {
+      next(err);
     }
-
-  },
-  contactPage:(req,res)=>{
-    try{
-      let user=req.session.user
-      res.render('user/contact',{user})
-    }catch(err){
-      next(err)
-    }
-
-
   },
 
-  cancelOrder:(req,res)=>{
-    try{
-      const id=req.body.id;
-      console.log(id)
+  cancelOrder: (req, res) => {
+    try {
+      const id = req.body.id;
+      console.log(id);
       orderModel
-      .updateOne(
-        { _id: id},
-        {
-          $set: {
-            order_status: "cancelled",
-            "delivery_status.cancelled.state": true,
-            "delivery_status.cancelled.date": Date.now(),
-          },
-        }
-      )
-      .then(() => {
-        res.json("Ordercanceled");
-      });
-
-    }catch(err){
-      next(err)
+        .updateOne(
+          { _id: id },
+          {
+            $set: {
+              order_status: "cancelled",
+              "delivery_status.cancelled.state": true,
+              "delivery_status.cancelled.date": Date.now(),
+            },
+          }
+        )
+        .then(() => {
+          res.json("Ordercanceled");
+        });
+    } catch (err) {
+      next(err);
     }
   },
 

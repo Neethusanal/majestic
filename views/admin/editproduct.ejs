@@ -32,14 +32,20 @@
             </div>
 
             <div class="mb-3">
+  
+ 
                 <label for="productNameInput" class="form-label">Image </label>
-                <input type="file" name="image"class="form-control" value="<%= product.image %> " class="form-control" multiple>
-              <%  for(let i=0;i<product.image.length;i++){%>
-                
-                <img src="/uploads/<%= product.image[i] %>" height="100" width="100"class="img-thumbnail mt-1" required>
-               
-               
+              
+                <input type="file"  id="fileInput" name="image"class="form-control" value="<%= product.image %> " class="form-control" multiple>
+           
+         
+                  <%  for(let i=0;i<product.image.length;i++){%>
+               <img src="/uploads/<%= product.image[i] %>" height="100" width="100"class="img-thumbnail mt-1" required>
                 <%}%>
+             
+            
+              
+               
                 <div class="previewImages"></div> 
             </div>
             <div class="mb-3">
@@ -90,3 +96,44 @@
           })
       })
     </script>
+
+
+
+<script>
+  const fileInput = document.getElementById("fileInput");
+  const canvas = document.getElementById("canvas");
+  const cropBtn = document.getElementById("cropBtn");
+
+  fileInput.addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = (event) => {
+      const image = new Image();
+      image.src = event.target.result;
+      image.onload = () => {
+        canvas.width = image.width;
+        canvas.height = image.height;
+        const context = canvas.getContext("2d");
+        context.drawImage(image, 0, 0);
+      };
+    };
+    
+    reader.readAsDataURL(file);
+  });
+
+  cropBtn.addEventListener("click", () => {
+    const x = 50;
+    const y = 50;
+    const width = 200;
+    const height = 200;
+    const croppedImage = document.createElement("img");
+    const croppedCanvas = document.createElement("canvas");
+    croppedCanvas.width = width;
+    croppedCanvas.height = height;
+    const croppedContext = croppedCanvas.getContext("2d");
+    croppedContext.drawImage(canvas, x, y, width, height, 0, 0, width, height);
+    croppedImage.src = croppedCanvas.toDataURL();
+    document.body.appendChild(croppedImage);
+  });
+</script>

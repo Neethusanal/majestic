@@ -22,6 +22,7 @@ router.get("/singleproduct/:id",controller.ProductPage);
 router.get("/shoppingcart",session.userSession,controller.shoppingCartpage)
 router.get('/add-to-cart',ajaxauth.verifyAjaxUser,controller.addtoCart);
 router.get('/checkout/:id',ajaxauth.verifyAjaxUser,controller.checkoutPage)
+
 router.get('/orderdetails',session.userSession,controller.orderDetails);
 router.get('/vieworder/:id',session.userSession,controller.viewOrder),
 
@@ -29,7 +30,7 @@ router.get('/vieworder/:id',session.userSession,controller.viewOrder),
 router.get('/userprofile',session.userSession,controller.getuserProfile)
 router.get('/about',controller.aboutPage)
 router.get('/contact',controller.contactPage)
-//router.get('/sear',controller.searchProducts)
+
 router.get('/logout',controller.Logout);
 
 
@@ -41,6 +42,7 @@ router.post("/resendotp", controller.resendOtp);
 router.post("/forgetpassword",controller.forgetPassword)
 router.post('/resetpassword',controller.resetPassword)
 router.post('/category',controller.getCategory)
+
 
 router.post('/addaddress/:id',session.userSession,controller.addAddress)
 router.post('/editaddress',ajaxauth.verifyAjaxUser,controller.editAddress)

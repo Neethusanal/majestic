@@ -29,6 +29,8 @@
                             <p class="text-muted mb-0 small"> Rs <%= val.price %>
                             </p>
                         </div>
+                        
+
                     </div>
                     <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
                 </div>
@@ -40,7 +42,7 @@
         </div>
 
 
-        <div class="card shadow-0 border mb-4 m-t-20 ">
+        <div class="card shadow-0 border-100 mb-4 m-t-20 ">
             <h2 class="text-dark">Delivery Address</h2>
             <div class="card-body">
 
@@ -119,6 +121,14 @@
                                 <td>
                                     <%=orderData.billamount%>
                                 </td>
+                            </tr>
+                            <tr>
+                                <th> Amount Paid</th>
+                               <td>
+                                <%=
+                                (Math.round(orderData.billamount-(orderData.billamount*orderData.coupon.discount)/100))
+                                %>
+                               </td>
                             </tr>
 
 

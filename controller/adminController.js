@@ -12,6 +12,7 @@ const bcrypt = require("bcryptjs");
 const { request } = require("express");
 const orderModel = require("../models/orderModel");
 const { handleDuplicate } = require('../Error/dbError')
+const {coupenDuplicate} =require('../Error/dbError')
 const sharp = require('sharp')
 module.exports = {
   //********************************************Login Page************************************************************ */
@@ -418,7 +419,7 @@ module.exports = {
   //addCoupen page rendering
 
   addCoupenpage: (req, res) => {
-    res.render("admin/addcoupen");
+    res.render("admin/addcoupen",{ errors: '' });
   },
   viewCoupen: async (req, res) => {
     try {
@@ -429,7 +430,7 @@ module.exports = {
     }
   },
 
-  addCoupen: (req, res, next) => {
+  addCoupen:async (req, res, next) => {
     try {
       const coupen = CoupenModel({
         coupenCode: req.body.coupenCode,
@@ -438,18 +439,19 @@ module.exports = {
         minOrder: req.body.minOrder,
         expirydate: req.body.expirydate,
       });
-      coupen.save().then(() => {
-        res.redirect("/admin/viewcoupen");
-      }).catch(error => {
-        let errors
-        if (error.code === 11000) {
-          errors.coupenDuplicate(error)
-          res.render('admin/addcoupen', { errors })
-        }
-      })
-
+    let coup= await  coupen.save()
+  
+      res.redirect("/admin/viewcoupen");
+    
     } catch (err) {
-      next(err);
+      const error = { ...err };
+      console.log(error.code+"ERROR CODE")
+      let errors
+      if (error.code === 11000) {
+        errors=coupenDuplicate(error)
+        console.log(errors+"ERORSSS");
+        res.render('admin/addcoupen', { errors })
+      }
     }
   },
   // Delete Product
@@ -583,7 +585,7 @@ module.exports = {
   },
   viewOrder: async (req, res, next) => {
     try {
-      const order = await orderModel.find({ order_status: 'completed' }).populate('userId').sort({ ordered_date: -1 });
+      const order = await orderModel.find({order_status:"completed"}).populate('userId').sort({ ordered_date: -1 });
       res.render('admin/vieworder', { order })
 
     } catch (err) {

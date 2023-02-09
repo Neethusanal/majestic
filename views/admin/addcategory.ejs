@@ -1,14 +1,15 @@
 <%- include('../admin/layouts/adminheader.ejs') -%>
 
 <div class="row mt-3">
-  <% if(errors){ %>
- <p><%= errors %> </p>
- <% } %> 
+
   <div class="col-lg-6">
     <div class="card">
       <div class="card-body">
         <div class="card-title">Add Category</div>
         <hr />
+        <% if(errors){ %>
+          <p class="text-danger"><%= errors %> </p>
+          <% } %>  
         <form action="/admin/addcategory" method="post" id="product-form">
           <div class="form-group">
             <label for="input-1">Category Name</label>

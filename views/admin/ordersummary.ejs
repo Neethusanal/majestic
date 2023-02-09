@@ -91,8 +91,17 @@
                     
                      <tr>
                       <th>Bill Amount:</th>
-                      <td><%=order.billamount%></td>
+                      <td>Rs  <%=order.billamount%></td>
                      </tr>
+                     
+                     <tr>
+                        <th><br> Paid Amount:</th>
+                        <td>Rs 
+                            <%=
+                            (Math.round(order.billamount-(order.billamount*order.coupon.discount)/100))
+                            %>
+                            </td>
+                       </tr>
 
                     
                   </tbody>
