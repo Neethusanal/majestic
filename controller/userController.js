@@ -375,6 +375,76 @@ module.exports = {
       next(err);
     }
   },
+  addtowishlist: async (req, res, next) => {
+    try {
+      let proId = req.params.id
+      console.log(proId,"prrrrrrrrrrrooooooooooooo")
+       let userId = req.session.user._id
+      let product = await ProductModel.findById({_id:proId})
+      console.log(product,"lllllllll")
+      let prodObj = {
+        productid: proId,
+        price:product.price,
+      }
+
+      let userWishlist = await WishlistModel.findOne({ user: userId })
+      if (userWishlist) {
+        let itemIndex = userWishlist.products.findIndex((p) => p.productid == proId);
+
+        if (itemIndex > -1) {
+          res.json({ added: true })
+        } else {
+          //product does not exists in wishlist, add new item
+          await WishlistModel.updateOne({ user: userId }, { $push: { products: prodObj } })
+          res.json({ status: true })
+        }
+
+      } else {
+        let wishObj = new WishlistModel({
+          user: userId,
+          products: [prodObj],
+        })
+        wishObj.save().then(() => {
+          res.json({ status: true })
+        })
+      }
+    } catch (error) {
+      next(error);
+    }
+  },
+
+
+
+  wishlistPage:async (req,res,next)=>{
+    try{
+      let user=req.session.user
+      let id=user._id
+      console.log(id)
+      let wishlist=await WishlistModel.findOne({user:id}).populate('products.productid')
+    console.log(wishlist,"uuu");
+      res.render('user/wishlist',{user,wishlist})
+
+    }catch(err){
+      next(err)
+    }
+
+ },
+ removeWishlist: async (req, res, next) => {
+  try {
+    let data = req.body
+    console.log(data,"ggg")
+    
+    let product = await productModel.findOne({ _id:data.product })
+    console.log(product,"data")
+    let wishlistData = await WishlistModel.updateOne({ _id: data.wishlist }, { $pull: { products: { productid: data.product } } })
+    console.log(wishlistData)
+    if (wishlistData) {
+      res.json({ removeProduct: true })
+    }
+  } catch (error) {
+    next(error);
+  }
+},
 
   shoppingCartpage: async (req, res, next) => {
     try {

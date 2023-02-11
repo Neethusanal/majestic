@@ -17,6 +17,8 @@ router.get("/forgetpassword",controller.forgetPasswordpage)
 router.get('/resetpassword',controller.resetPasswordpage)
 router.get("/shop",paginate, controller.getallProducts);
 router.get("/singleproduct/:id",controller.ProductPage);
+router.get('/wishlist',session.userSession,controller.wishlistPage)
+router.get('/addtowishlist/:id',ajaxauth.verifyAjaxUser,controller.addtowishlist)
 
 
 router.get("/shoppingcart",session.userSession,controller.shoppingCartpage)
@@ -49,6 +51,7 @@ router.post('/editaddress',ajaxauth.verifyAjaxUser,controller.editAddress)
 router.post('/updateaddress/:id',ajaxauth.verifyAjaxUser,controller.updateAddress)
 router.post('/deleteaddress',ajaxauth.verifyAjaxUser,controller.deleteAddress)
 router.post('/deletecartProduct',ajaxauth.verifyAjaxUser,controller.deletecartProduct)
+router.post('/removewishlistproduct/:id',controller.removeWishlist)
 router.post('/changeQuantity',ajaxauth.verifyAjaxUser,controller.changeQuantity);
 router.post('/orderId',session.userSession,controller.orderId)
 router.post('/applyCoupon',ajaxauth.verifyAjaxUser,controller.applyCoupon)

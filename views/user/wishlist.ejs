@@ -1,2 +1,134 @@
+<%- include('../user/layouts/userheader.ejs') -%>
+<form class="bg0 p-t-115 p-b-85">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
+                <div class="m-l-25 m-r--38 m-lr-0-xl">
+                    <% if (wishlist.products.length==0)    {%>
+                        <div class="cart-empty text-warning">
+                            <p>Your shopping cart is currently empty.</p>
+                            
+                          </div>
+                          
+                        <%} else {%> 		
 
+                    <div class="wrap-table-shopping-cart">
+                        
+                        <table class="table-shopping-cart">
+                            
+                            <tr class="table_head">
+                                <th class="column-1">Product</th>
+                                <th class="column-2">  </th>
+                                <th class="column-3">Price</th>
+                              
+                                <th class="column-5">     </th>
+                                <th class="column-4">      </th>
+                               
+                            </tr>
+                            	                      
+									
+								
+                
 
+                            <% wishlist.products.forEach(function(x){%>
+                            <tr class="table_row " id="<%=x.productid._id %>item">
+                                <td class="column-1">
+                                    <div class="how-itemcart1">
+                                        <img src="/uploads/<%= x.productid.image[0] %>" alt="IMG">
+                                    </div>
+                                </td>
+                                <td class="column-2"><%=x.productid.productName%></td>
+                                <td class="column-3"><%=x.productid.price%></td>
+                              
+                                <td>
+
+                                    <button onclick="addtoCart('<%=x.productid._id%>')" class=" column-5 more-padding-on-right" type="button" >
+                                    
+                                        <i class="zmdi zmdi-shopping-cart"></i>
+                                    </button> 
+                                    
+                                    
+                                </td>
+                               
+                                <td>
+
+                                    <button onclick="removeProduct('<%= wishlist._id%>','<%=x.productid._id %>')" class="btn-num-product-up cl8 hov-btn3  flex-c-m " type="button" >
+ 
+                                        <i class="bi bi-trash text-danger"></i>
+                                    </button> 
+                                   
+                                    
+                                </td>
+                               
+                            </tr>
+                            <%})%>
+                           
+                        </table>
+                      
+                        
+                    </div>
+
+                    <%}%>
+                </div>
+            </div>
+
+           
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    
+<%- include('../user/layouts/userfooter.ejs') -%>
+<script>
+
+function addtoCart(proId) {
+		console.log("start");
+		$.ajax({
+			url: `/add-to-cart?id=${proId}`,
+			method: 'get',
+			success: (response) => {
+                if (response=='added') {
+              Swal.fire(
+                'Added!',
+                'Product added to cart',
+                'success'
+              )
+               
+            }
+				else if(response=='quantityincrease'){
+					swal("quantityincreased!", "Product Added successfully!", "success");
+				}
+        }
+    })
+}
+				
+</script>
+
+<script>
+    function removeProduct(wishlistId,proId) {
+        console.log("start")
+        console.log(wishlistId,proId)
+        $.ajax({
+          url: '/removewishlistproduct/' + proId,
+          data: {
+            wishlist: wishlistId ,
+            product: proId
+          },
+          method: 'post',
+          success: (response) => {
+            if (response.removeProduct) {
+              Swal.fire(
+                'Removed!',
+                'Product removed from wishlist',
+                'success'
+              )
+              $('#' + proId + 'item').remove()
+            } else {
+              document.getElementById(proId).innerHTML = response.removeProduct
+            }
+          }
+        })
+      }
+    </script>
+</script>

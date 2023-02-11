@@ -139,7 +139,7 @@
                 </div>
                  <div class="modal-footer">
 
-          <!-- <button type="button"  class="btn btn-primary">Add address</button> -->
+         
         </div> 
             </div>
         </div>
@@ -199,31 +199,6 @@
                                                             </button></a>
                                                     </div>
                                                 </div>
-
-                                                <!-- <div class="form-group mb-4">
-                                                    <div class="row">
-                                                        <label class="col-md-4">Address</label>
-                                                        <div class="col-md-8">
-                                                           
-                                                           < % user.addressData.forEach(function(val) { %>
-                                                                <a  class="text-decoration-none text-dark "  data-bs-toggle="modal" data-bs-target="#accountCreationModal">
-                                                                    <div class="card p-3 bg-light my-2"  id="item">
-                                                                        <div class="d-flex justify-content-between">
-                                                                           
-                                                                            <a class="text-danger text-lg-end text-decoration-none"  href="#"><large ><i class="bi bi-trash-fill"></i></large></a>
-                                                                        </div>
-                                                                        <div class="col-md-6"> -->
-                                                                            <!-- <p id="p"><b>< %= val.fullName%></b>,&nbsp;< %= val.house +', '+ val.post +', ' +val.pin+','+ val.city +',' +val.district+', '+val.state   %></p> -->
-                                                                        <!-- </div>
-                                                                        <a class="text-success text-lg-end text-decoration-none" data-toggle="modal" data-target="#exampleModal"  href="#"><small ><i class="bi bi-pencil-square"></i> Edit</small></a>
-                                                                    </div>
-                                                                </a>
-                                                        < % }) %>
-                                                
-                                                        </div>
-                                                    </div>
-                                                </div> -->
-
                                                 <div class="border p-2 mt-2 " id="">
                                                     <div id="addressList">
                     
@@ -248,8 +223,8 @@
                                                             <% }) %>
                                                         <!-- < % } %> -->
                                                     </div>
-
-
+                                                </div>
+                                            </div>
                                         </form>
                                     </div>
                                 </div>
@@ -261,8 +236,9 @@
         </div>
     </div>
 
-</body>
+
 <%- include('../user/layouts/userfooter.ejs') -%>
+</body>
     <script>
         function addaddress(){
             //console.log("INSIDE");
