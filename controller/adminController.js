@@ -36,14 +36,25 @@ module.exports = {
       let email = req.body.email;
       let password = req.body.password;
       console.log(email, password, "fghjkl");
-      const admin = await AdminModel.find({ email: email, password: password });
-      if (!admin) {
-        console.log("not admin")
-        return res.redirect("/admin/adminlogin");
-      } else {
+      const admin = await AdminModel.findOne({ email: email, password: password });
+      console.log(admin,"lll");
+      if (admin) {
         req.session.doLogin = true;
-        req.session.admin = admin.userName;
+        req.session.message = {
+          type: 'success',
+          message: 'Login Successful'
+        }
         return res.redirect("/admin/adminhome");
+       
+      } else {
+         req.session.Login = false;
+        req.session.adminLoggedIn = false
+        req.session.message = {
+          type: 'danger',
+          message: 'Invalid password'
+        }
+        console.log("not admin")
+        return res.redirect("/admin");
       }
       // const isMatch = await bcrypt.compare(password,password);
       // console.log("is match ", isMatch)
@@ -59,6 +70,7 @@ module.exports = {
   // ***************************************************************************************************************
   Home: async (req, res, next) => {
     try {
+      
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
       startOfMonth.setHours(0, 0, 0, 0);
@@ -95,8 +107,12 @@ module.exports = {
       const categories = await CategoryModel.find({}).count()
       const order = await orderModel.find({ order_status: { $ne: "pending" } }).count()
       let orders = await orderModel.find({ order_status: { $ne: "pending" } }).populate('products.productid').populate('userId').sort({ ordered_date: -1 }).limit(10)
+      const codcount = await orderModel.find({ 'payment.payment_method': "cash_on_delivery" }).count()
+      const onlinecount = await orderModel.find({  'payment.payment_method':"Online_payment" }).count()
+      console.log(codcount,onlinecount,"asdfghjkl;")
 
-      res.render("admin/adminhome", { users, products, categories, order, orders, salesChart });
+
+      res.render("admin/adminhome", { users, products, categories, order, orders, salesChart ,codcount,onlinecount});
 
     } catch (err) {
       next(err)
@@ -334,7 +350,7 @@ module.exports = {
         req.files.forEach((file) => {
           promises.push(new Promise((resolve, reject) => {
             const filename = file.originalname.replace(/\..+$/, '')
-            const newFilename = `bmart-${filename}-${Date.now()}.jpeg`
+            const newFilename = `${filename}-${Date.now()}.jpeg`
             sharp(file.path)
               .resize({ width: 900, height: 900 })
               .jpeg({
@@ -692,13 +708,14 @@ module.exports = {
 
   },
 
-  logout: (req, res) => {
+  logout: (req, res,next) => {
     try {
-      req.session.loggedOut = true;
+      console.log("admin logout");
+      req.session.Login = true;
       req.session.destroy();
       res.redirect("/admin");
     } catch (err) {
-      next(createError(404));
+      next(err);
     }
   },
 

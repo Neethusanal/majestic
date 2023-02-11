@@ -284,7 +284,7 @@
                             </div>
                         </div>
                     </div>
-                    <%})%>
+             <%})%>
 
 
 
@@ -303,25 +303,25 @@
                     </a>
 
 
-                    <% } %>
-                        <% if(product.previous){ %>
+                <% } %>
+                <% if(product.previous){ %>
 
                             <a class="btn btn-dark m-r-5 m-r-5" onclick="prev('<%= product.previous.page %>')">
                                 <%= product.previous.page %>
                             </a>
-                            <% } %>
+                <% } %>
 
 
-                                <% } %>
+            <% } %>
 
 
 
         </div>
     </div>
-    
 
 
-    <%- include('../user/layouts/userfooter.ejs') -%>
+
+<%- include('../user/layouts/userfooter.ejs') -%>
 
 
         <script src="https://code.jquery.com/jquery-3.6.3.js"

@@ -19,6 +19,14 @@
 				<div class="col-lg-10 col-xl-7 m-lr-auto m-b-50 ">
 					<div class="m-l-25 m-r--38 m-lr-0-xl">
 						<div class="wrap-table-shopping-cart">
+							<% if (cart.products.length==0)    {%>
+								<div class=" p-t-50 cart-empty text-warning">
+									<p>Your shopping cart is currently empty.</p>
+									
+								  </div>
+								  
+								<%} else {%> 		
+
 							<table class="table-shopping-cart">
 								<thead>
 									<tr class="table_head">
@@ -32,14 +40,7 @@
 								<tbody>
 									
 									                      
-									<% if (cart.products.length==0)    {%>
-										<div class="cart-empty text-warning">
-											<p>Your shopping cart is currently empty.</p>
-											
-										  </div>
-										  
-										<%} else {%> 		
-
+									
 								
 									<% cart.products.forEach(function(cartData){ %>
 										<tr class="table_row" id="<%= cartData.productid._id %>cartitem">

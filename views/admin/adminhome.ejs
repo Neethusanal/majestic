@@ -1,225 +1,295 @@
 <!--Adding layout pages-->
 
 <%- include('../admin/layouts/adminheader.ejs') -%>
-<script
-src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
-</script>
-<!--Start Dashboard Content-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+  </script>
 
-<div class="card mt-3">
-  <div class="card-content">
-    <div class="row row-group m-0">
-      <div class="col-12 col-lg-6 col-xl-3 border-light">
-        <div class="card-body">
-          <h5 class="text-white mb-0">
-            <%=users%>
-            <span class="float-right"><i class="bi bi-people-fill"></i></span>
-          </h5>
-          <div class="progress my-3" style="height: 3px">
-            <div class="progress-bar" style="width: 55%"></div>
-          </div>
-          <p class="mb-0 text-white small-font">
-           Users
-          
-          </p>
-        </div>
-      </div>
-      <div class="col-12 col-lg-6 col-xl-3 border-light">
-        <div class="card-body">
-          <h5 class="text-white mb-0">
-          <%=products%>
-          <span class="float-right"><i class=""></i></span>
-          </h5>
-          <div class="progress my-3" style="height: 3px">
-            <div class="progress-bar" style="width: 55%"></div>
-          </div>
-          <p class="mb-0 text-white small-font">
-            Products
-           
-          </p>
-        </div>
-      </div>
-      <div class="col-12 col-lg-6 col-xl-3 border-light">
-        <div class="card-body">
-          <h5 class="text-white mb-0">
-             <%=categories%>
-            <span class="float-right"><i class=""></i></span>
-          </h5>
-          <div class="progress my-3" style="height: 3px">
-            <div class="progress-bar" style="width: 55%"></div>
-          </div>
-          <p class="mb-0 text-white small-font">
-            Categories
-            
-          </p>
-        </div>
-      </div>
-      <div class="col-12 col-lg-6 col-xl-3 border-light">
-        <div class="card-body">
-          <h5 class="text-white mb-0">
-            <%=order%>
-            <span class="float-right"><i class=""></i></span>
-          </h5>
-          <div class="progress my-3" style="height: 3px">
-            <div class="progress-bar" style="width: 55%"></div>
-          </div>
-          <p class="mb-0 text-white small-font">
-            Orders
-          
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<div class="row">
-  <div class="col-12 col-lg-8 col-xl-8">
-    <div class="card">
-      <div class="card-header">
-        Site Traffic
-        <div class="card-action">
-          <div class="dropdown">
-            <a
-              href="javascript:void();"
-              class="dropdown-toggle dropdown-toggle-nocaret"
-              data-toggle="dropdown"
-            >
-              <i class="icon-options"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="javascript:void();">Action</a>
-              <a class="dropdown-item" href="javascript:void();"
-                >Another action</a
-              >
-              <a class="dropdown-item" href="javascript:void();"
-                >Something else here</a
-              >
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void();"
-                >Separated link</a
-              >
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card-body">
-        <div class="chart-container-1">
-          <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-        </div>
-      </div>
-      </div>
-    </div>
-  </div>
-</div>
-<!--End Row-->
+ 
+      <!--Start Dashboard Content-->
 
-<div class="row">
-  <div class="col-12 col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        Recent Order Tables
-        <div class="card-action">
-          <div class="dropdown">
-            <a
-              href="javascript:void();"
-              class="dropdown-toggle dropdown-toggle-nocaret"
-              data-toggle="dropdown"
-            >
-              <i class="icon-options"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right">
-              <a class="dropdown-item" href="javascript:void();">Action</a>
-              <a class="dropdown-item" href="javascript:void();"
-                >Another action</a
-              >
-              <a class="dropdown-item" href="javascript:void();"
-                >Something else here</a
-              >
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="javascript:void();"
-                >Separated link</a
-              >
-            </div>
-          </div>
-        </div>
-      </div> 
-      <div class="table-responsive">
-        <table class="table align-items-center table-flush table-borderless">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>User</th>
-              <th>Products</th>
-              <th>Amount</th>
-              <th>Date</th>
-              <th>Order_status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% orders.forEach(function(data){%>
-            <tr>
-            
-              <td> <%=data._id%> </td>
-              <td><%=data.userId.fullName%></td>
-             
-              <td><%=data.products.length%> items</td>
-              <td><%= data.billamount%></td>
-              <td><%= data.ordered_date.getDate()+ '-' + (data.ordered_date.getMonth()+1) +'-'+
-                data.ordered_date.getFullYear()%></td>
-              <td><%=data.payment.payment_method%></td>
-              <td>
-                
+      <div class="card mt-3">
+        <div class="card-content">
+          <div class="row row-group m-0">
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+              <div class="card-body">
+                <h5 class="text-white mb-0">
+                  <%=users%>
+                    <span class="float-right"><i class="bi bi-people-fill"></i></span>
+                </h5>
+                <div class="progress my-3" style="height: 3px">
+                  <div class="progress-bar" style="width: 55%"></div>
                 </div>
-              </td>
-             
+                <p class="mb-0 text-white small-font">
+                  Users
+
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+              <div class="card-body">
+                <h5 class="text-white mb-0">
+                  <%=products%>
+                    <span class="float-right"><i class=""></i></span>
+                </h5>
+                <div class="progress my-3" style="height: 3px">
+                  <div class="progress-bar" style="width: 55%"></div>
+                </div>
+                <p class="mb-0 text-white small-font">
+                  Products
+
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+              <div class="card-body">
+                <h5 class="text-white mb-0">
+                  <%=categories%>
+                    <span class="float-right"><i class=""></i></span>
+                </h5>
+                <div class="progress my-3" style="height: 3px">
+                  <div class="progress-bar" style="width: 55%"></div>
+                </div>
+                <p class="mb-0 text-white small-font">
+                  Categories
+
+                </p>
+              </div>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-3 border-light">
+              <div class="card-body">
+                <h5 class="text-white mb-0">
+                  <%=order%>
+                    <span class="float-right"><i class=""></i></span>
+                </h5>
+                <div class="progress my-3" style="height: 3px">
+                  <div class="progress-bar" style="width: 55%"></div>
+                </div>
+                <p class="mb-0 text-white small-font">
+                  Orders
+
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12 col-lg-8 col-xl-8">
+          <div class="card">
+            <div class="card-header">
+              Sales
+              <div class="card-action">
+                <div class="dropdown">
+                  <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+                    <i class="icon-options"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="javascript:void();">Action</a>
+                    <a class="dropdown-item" href="javascript:void();">Another action</a>
+                    <a class="dropdown-item" href="javascript:void();">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="javascript:void();">Separated link</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container-1">
+                <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="col-12 col-lg-4 col-xl-4">
+          <div class="card">
+            <div class="card-header">Payment
+              <div class="card-action">
+                <div class="dropdown">
+                  <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+                    <i class="icon-options"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="javascript:void();">Action</a>
+                    <a class="dropdown-item" href="javascript:void();">Another action</a>
+                    <a class="dropdown-item" href="javascript:void();">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="javascript:void();">Separated link</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="chart-container-2">
+                <canvas id="payment" style="width:100%;max-width:700px"></canvas>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center">
+                <tbody>
+                  <tr>
+                    <td><i class="fa fa-circle text-white mr-2"></i> online payment</td>
+                    <td>
+                      <%=codcount %>
+                    </td>
+
+                  </tr>
+                  <tr>
+                    <td><i class="fa fa-circle text-light-1 mr-2"></i>COD</td>
+                    <td>
+                      <%=onlinecount%>
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div><!--End Row-->
+
+      <div class="row">
+        <div class="col-12 col-lg-12">
+          <div class="card">
+            <div class="card-header">
+              Recent Order Tables
+              <div class="card-action">
+                <div class="dropdown">
+                  <a href="javascript:void();" class="dropdown-toggle dropdown-toggle-nocaret" data-toggle="dropdown">
+                    <i class="icon-options"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="javascript:void();">Action</a>
+                    <a class="dropdown-item" href="javascript:void();">Another action</a>
+                    <a class="dropdown-item" href="javascript:void();">Something else here</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="javascript:void();">Separated link</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table align-items-center table-flush table-borderless">
+                <thead>
+                  <tr>
+                    <th>Order ID</th>
+                    <th>User</th>
+                    <th>Products</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Order_status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% orders.forEach(function(data){%>
+                    <tr>
+
+                      <td>
+                        <%=data._id%>
+                      </td>
+                      <td>
+                        <%=data.userId.fullName%>
+                      </td>
+
+                      <td>
+                        <%=data.products.length%> items
+                      </td>
+                      <td>
+                        <%= data.billamount%>
+                      </td>
+                      <td>
+                        <%= data.ordered_date.getDate()+ '-' + (data.ordered_date.getMonth()+1) +'-'+
+                          data.ordered_date.getFullYear()%>
+                      </td>
+                      <td>
+                        <%=data.payment.payment_method%>
+                      </td>
+                      <td>
+
+            </div>
+            </td>
+
             </tr>
             <%})%>
-          
-          </tbody>
-        </table>
+
+              </tbody>
+              </table>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</div>
-<!--End Row-->
 
-<!--End Dashboard Content-->
+      <!--End Row-->
 
-<%- include('../admin/layouts/adminfooter.ejs') -%>
-<script>
- <%
-function getMonthName(monthNumber) {
-  const date = new Date();
-  date.setMonth(monthNumber - 1);
-  return date.toLocaleString('en-US', { month: 'long' });
-}
-%>
+      <!--End Dashboard Content-->
 
-    <% let dates = salesChart.map((val)=>{ return val._id.slice(-2)}) %>
-    <% let salesCount = salesChart.map((val)=>{ return val.count}) %>
-    
-    // < % let cancelCount = salesCancel.map((val)=>{ return val.count}) %>
-    var xValues = [0, <%= dates%>];
-    new Chart("myChart", {
-      type: "line",
-      data: {
-        labels: xValues,
-        datasets: [{
-          label: 'Orders',
-          data: [0, <%=salesCount %>],
-          borderColor: "rgb(153, 255, 153)",
-          fill: false
-        }]
-      },
-      options: {
-        legend: {
-          display: false
-        },
-        title: {
-          display: true,
-          text: "Order chart <%= getMonthName(Number(salesChart[0]._id.substring(7,5))) %> -  <%= salesChart[0]._id.substring(0, 4)%>"
-        }
-      }
-    });
-</script>
+      <%- include('../admin/layouts/adminfooter.ejs') -%>
+
+        <script>
+        <%
+            function getMonthName(monthNumber) {
+              const date = new Date();
+              date.setMonth(monthNumber - 1);
+              return date.toLocaleString('en-US', { month: 'long' });
+            }
+            %>
+ 
+     <% let dates = salesChart.map((val) => { return val._id.slice(-2) }) %>
+     <% let salesCount = salesChart.map((val) => { return val.count }) %>
+
+     // < % let cancelCount = salesCancel.map((val)=>{ return val.count}) %>
+     var xValues = [0, <%= dates %>];
+          new Chart("myChart", {
+            type: "line",
+            data: {
+              labels: xValues,
+              datasets: [{
+                label: 'Orders',
+                data: [0, <%=salesCount %>],
+                borderColor: "rgb(153, 255, 153)",
+                fill: false
+              }]
+            },
+            options: {
+              legend: {
+                display: false
+              },
+              title: {
+                display: true,
+                text: "Order chart <%= getMonthName(Number(salesChart[0]._id.substring(7,5))) %> -  <%= salesChart[0]._id.substring(0, 4)%>"
+              }
+            }
+          });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+          var xValues = ["COD", "Online payment"];
+          var yValues = [`<%=codcount %>`, `<%=onlinecount%>`,];
+          var barColors = [
+            // "#b91d47",
+            // "#00aba9",
+            "#2b5797",
+            "#e8c3b9",
+            //"#1e7145"
+          ];
+
+          new Chart("payment", {
+            type: "pie",
+            data: {
+              labels: xValues,
+              datasets: [{
+                backgroundColor: barColors,
+                data: yValues
+              }]
+            },
+            options: {
+              title: {
+                display: true,
+                text: "Payment "
+              }
+            }
+          });
+        </script>
