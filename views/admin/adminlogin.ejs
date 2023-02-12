@@ -17,49 +17,36 @@
 
 
 
+  
 
 
-  
-   <div class="container">
-    <div class="row">
-        <div class="col-lg-3 col-md-2"></div>
-        <div class="col-lg-6 col-md-8 login-box">
-            <div class="col-lg-12 login-key">
-                <i class="fa fa-key" aria-hidden="true"></i>
-            </div>
-            <div class="col-lg-12 login-title">
-                ADMIN PANEL
-            </div>
-  
-            <div class="col-lg-12 login-form">
-                <div class="col-lg-12 login-form">
-                    <form action="/admin/adminlogin" method="post">
-                        <div class="form-group">
-                            <label class="form-control-label">EMAIL</label>
-                            <input name="email" type="text" class="form-control"/>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-control-label">PASSWORD</label>
-                            <input name="password" type="password" class="form-control"/>
-                        </div>
-  
-                        <div class="col-lg-12 loginbttm">
-                            <div class="col-lg-6 login-btm login-text">
-                            </div>
-                            <div class="col-lg-6 login-btm login-button">
-                                <button type="submit" class="btn btn-outline-primary">LOGIN</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-2"></div>
+
+
+   <form action="/admin/adminlogin" method="post">
+    <div class="background-wrap">
+        <div class="background"></div>
+      </div>
+      
+      <form action="/admin/adminlogin" method="post">
+        <h1 id="litheader">ADMIN</h1>
+        <div class="inset">
+          <p>
+            <input type="text" name="email" id="email" placeholder="Email address">
+          </p>
+          <p>
+            <input type="password" name="password" id="password" placeholder="Access code">
+          </p>
+          <div style="text-align: center;">
+            
+            
+          </div>
+          <input class="loginLoginValue" type="hidden" name="service" value="login" />
         </div>
-    </div>
+        <p class="p-container">
+          <input type="submit" name="Login" id="go" value="Authorize">
+        </p>
+      </form>
 
-  
-   <script src="/admin/js/script.js"></script>
-  
 
 </body>
-</html>
+</html> 
