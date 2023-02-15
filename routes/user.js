@@ -48,7 +48,7 @@ router.post('/resetpassword',controller.resetPassword)
 router.post('/category',paginate,controller.getCategory)
 
 
-router.post('/addaddress/:id',session.userSession,controller.addAddress)
+router.post('/addaddress',session.userSession,controller.addAddress)
 router.post('/editaddress',ajaxauth.verifyAjaxUser,controller.editAddress)
 router.post('/updateaddress/:id',ajaxauth.verifyAjaxUser,controller.updateAddress)
 router.post('/deleteaddress',ajaxauth.verifyAjaxUser,controller.deleteAddress)

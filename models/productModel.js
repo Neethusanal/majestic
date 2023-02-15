@@ -30,6 +30,7 @@ const productSchema = new mongoose.Schema({
   }],
   instock: {
     type: Boolean,
+    
     required: true,
   },
   stockvalue:{

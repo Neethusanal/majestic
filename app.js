@@ -10,6 +10,7 @@ const bcrypt = require('bcryptjs')
 const bodyparser=require('body-parser')
 const multer=require('multer')
 const createError = require('http-errors')
+var sanitizer = require('sanitize')();
 
 
 

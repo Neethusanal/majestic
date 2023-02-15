@@ -142,7 +142,7 @@
 
                     <div>
                         <% if(orderData.delivery_status.delivered.state==true){ %>
-                            <h1>no cancellation</h1>
+                            <h3>Already Delivered Cannot Cancelled</h3>
                             <% }else{ %>
                         <button type="button" onclick="cancelOrder('<%=orderData._id%>')" class="btn btn-dark"
                             data-toggle="modal" data-target="#exampleModal">

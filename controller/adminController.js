@@ -14,6 +14,7 @@ const orderModel = require("../models/orderModel");
 const { handleDuplicate } = require('../Error/dbError')
 const {coupenDuplicate} =require('../Error/dbError')
 const sharp = require('sharp')
+var sanitizer = require('sanitize')();
 module.exports = {
   //********************************************Login Page************************************************************ */
 
@@ -333,69 +334,116 @@ module.exports = {
       next(err);
     }
   },
-  updateProduct: async (req, res, next) => {
-    try {
-      //console.log(req.body,'here');
-      // const category = await CategoryModel.find({_id:req.body});
-      const category = req.body.category;
-      const id = req.params.id;
-      console.log(id)
-      const stock = req.body.instock == 'true' ? true : false
-      console.log(stock, 'stock');
-      if (req.files.length > 0) {
-        //const image = req.files.map((file) => file.filename);
+  // updateProduct: async (req, res, next) => {
+  //   try {
+   
+//       const category = req.body.category;
+//       const id = req.params.id;
+//       console.log(id)
+//       const stock = req.body.instock == 'true' ? true : false
+//       console.log(stock, 'stock');
+//       if (req.files.length > 0) {
+      
+//         let image = []
+//         let promises = [];
+//         req.files.forEach((file) => {
+//           promises.push(new Promise((resolve, reject) => {
+//             const filename = file.originalname.replace(/\..+$/, '')
+//             const newFilename = `${filename}-${Date.now()}.jpeg`
+//             sharp(file.path)
+//               .resize({ width: 900, height: 900 })
+//               .jpeg({
+//                 quality: 100,
+//                 chromaSubsampling: '4:4:4'
+//               })
+//               .toFile(`public/uploads/${newFilename}`)
+//             image.push(newFilename)
+//             resolve();
+//           }));
 
-        let image = []
-        let promises = [];
-        req.files.forEach((file) => {
-          promises.push(new Promise((resolve, reject) => {
-            const filename = file.originalname.replace(/\..+$/, '')
-            const newFilename = `${filename}-${Date.now()}.jpeg`
-            sharp(file.path)
-              .resize({ width: 900, height: 900 })
-              .jpeg({
-                quality: 100,
-                chromaSubsampling: '4:4:4'
-              })
-              .toFile(`public/uploads/${newFilename}`)
-            image.push(newFilename)
-            console.log(newFilename);
-            resolve();
-          }));
-
-        })
-
-        console.log(image)
+//         })
+       
 
 
         
-        const product = await ProductModel.findByIdAndUpdate(
-          { _id: id },
-          {
-            $set: {
-              productName: req.body.productName,
-              category: category._id,
-              description: req.body.description,
-              image:image==null?null: image,
-              price: req.body.price,
-              quantity: req.body.quantity,
-              instock: stock,
-              stockvalue: req.body.stockvalue
-            },
-          }
-        );
+//         const product = await ProductModel.findByIdAndUpdate(
+//           { _id: id },
+//           {
+//             $set: {
+//               productName: req.body.productName,
+//               category: category._id,
+//               description: req.body.description,
+//               image: image,
+//               price: req.body.price,
+//               quantity: req.body.quantity,
+//               instock: stock,
+//               stockvalue: req.body.stockvalue
+//             },
+//           }
+//         );
+// console.log(product,"iiiiiiiiiiiiiiiiiiiiiii");
+//         product.save().then(() => {
+//           res.redirect("/admin/viewproducts");
+//         });
 
-        product.save().then(() => {
-          res.redirect("/admin/viewproducts");
-        });
+//       }
+//     } catch (err) {
+//       next(err);
+//     }
+//   },
 
-      }
-    } catch (err) {
-      next(err);
+updateProduct: async (req, res, next) => {
+   try {
+    const id = req.params.id;
+    const stock = req.body.instock == 'true' ? true : false
+   
+    let dataToUpload = {
+      productName: req.body.productName,
+      category: req.body.category,
+      description: req.body.description,
+      price: req.body.price,
+      quantity: req.body.quantity,
+      instock: stock,
+      stockvalue: req.body.stockvalue
     }
+    if (req.files.length > 0) {
+      let image = []
+      let promises = [];
+      req.files.forEach((file) => {
+        promises.push(new Promise((resolve, reject) => {
+          const filename = file.originalname.replace(/\..+$/, '')
+          const newFilename = `${filename}-${Date.now()}.jpeg`
+          sharp(file.path)
+            .resize({ width: 800, height: 800 })
+            .jpeg({
+              quality: 100,
+              chromaSubsampling: '4:4:4'
+            })
+            .toFile(`public/uploads/${newFilename}`)
+          image.push(newFilename)
+          resolve();
+        }));
+      })
+      dataToUpload.image = image
+    }
+    ProductModel.findByIdAndUpdate({ _id: id }, dataToUpload, (err, result) => {
+      if (err) {
+        
+        res.redirect('/admin/editproduct/' + id)
+      } else {
+       
+        res.redirect('/admin/viewproducts')
+      }
+    }).populate("category")
+
+
+
+
+
+   }catch(err){
+    next(err)
+   }
   },
-
-
   unlistProduct: async (req, res, next) => {
     try {
       let id = req.params.id;
@@ -461,7 +509,7 @@ module.exports = {
     
     } catch (err) {
       const error = { ...err };
-      console.log(error.code+"ERROR CODE")
+   
       let errors
       if (error.code === 11000) {
         errors=coupenDuplicate(error)
@@ -521,12 +569,7 @@ module.exports = {
       next(err);
     }
   },
-  // editBannerpage:async(req,res)=>{
-  //   let id=req.params.id;
-  //   const banner=await BannerModel.findById({_id:id});
-  //   res.render('admin/editbanner',{banner});
-
-  // },
+ 
 
   editBannerpage: (req, res) => {
     let id = req.params.id;
@@ -558,19 +601,7 @@ module.exports = {
     } catch (err) {
       next(err);
     }
-    // let newimage = ''
-    // if(req.file){
-    //   newimage=req.file.filename
-    // }
-    // else{
-    //   newimage=req.body.oldimage
-    // }
-    // const { bannerName,description }=req.body
-    // BannerModel.findOneAndUpdate({_id:id},{
-    //   bannerName:req.body.bannerName,
-    //   description:req.body.description,
-    //   image:newimage
-    // })
+   
   },
 
   enableBanner: async (req, res, next) => {

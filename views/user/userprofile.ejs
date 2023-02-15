@@ -5,14 +5,18 @@
     <!--  Google Fonts-->
     <!-- <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet"> -->
     <!-- Bootstrap CSS -->
-    <!-- <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <!--
 
-    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'> -->
+    -->
 
 <!-- 
     <link rel="'stylesheet" href="user/css/profile.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
      -->
+     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css'>
+     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
     <body>
 
      <div class="student-profile py-4">
@@ -193,7 +197,7 @@
                                                     <div class="container-fluid d-flex justify-content-center">
 
                                                         <a href="#"> <!-- Button trigger modal -->
-                                                            <button type="button" onclick="addaddress(user._id)" class="btn btn-dark"
+                                                            <button type="button" onclick="addaddress()" class="btn btn-dark"
                                                                 data-toggle="modal" data-target="#exampleModal" >
                                                             ADD ADDRESS
                                                             </button></a>
@@ -217,7 +221,7 @@
                                                                             <div class="col-md-6">
                                                                                 <p id="p"><b><%= val.fullName%></b>,&nbsp;<%= val.house +', '+ val.post +', ' +val.pin+','+ val.city +',' +val.district+', '+val.state   %></p>
                                                                             </div>
-                                                                            <a class="text-success text-lg-end text-decoration-none" data-toggle="modal" data-target="#exampleModal" onclick="editaddress('<%= val._id %>')" href="#"><small ><i class="bi bi-pencil-square"></i> Edit</small></a>
+                                                                            <a id="actionmodel" class="text-success text-lg-end text-decoration-none" data-toggle="modal" data-target="#exampleModal" onclick="editaddress('<%= val._id %>')" href="#"><small ><i class="bi bi-pencil-square"></i> Edit</small></a>
                                                                         </div>
                                                                     </a>
                                                             <% }) %>
@@ -246,6 +250,7 @@
             document.getElementById("actionmodel").setAttribute('action','/addaddress')
         }
     function editaddress(id) {
+        console.log(id+"IDDD");
       $.ajax({
       type: "POST",
       url: "/editaddress",

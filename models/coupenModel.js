@@ -8,10 +8,11 @@ const coupenSchema= new mongoose.Schema({
         unique:true,
         set:value=>value.toLowerCase()
     },
-    status:{
-        type:Boolean,
-        required:true
-    },amount:{
+    // status:{
+    //     type:Boolean,
+    //     required:true
+    // },
+    amount:{
         type:Number,
         required:true
     },

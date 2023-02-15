@@ -1,6 +1,7 @@
 <!--Adding layout pages-->
 
 <%- include('../admin/layouts/adminheader.ejs') -%>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
   </script>
 
@@ -132,14 +133,14 @@
               <table class="table align-items-center">
                 <tbody>
                   <tr>
-                    <td><i class="fa fa-circle text-white mr-2"></i> online payment</td>
+                    <td><i class="fa fa-circle text-white mr-2"></i> COD</td>
                     <td>
                       <%=codcount %>
                     </td>
 
                   </tr>
                   <tr>
-                    <td><i class="fa fa-circle text-light-1 mr-2"></i>COD</td>
+                    <td><i class="fa fa-circle text-light-1 mr-2"></i>online payment</td>
                     <td>
                       <%=onlinecount%>
                     </td>
@@ -173,7 +174,7 @@
               </div>
             </div>
             <div class="table-responsive">
-              <table class="table align-items-center table-flush table-borderless">
+              <table class="table align-items-center table-flush table-borderless" id="table4">
                 <thead>
                   <tr>
                     <th>Order ID</th>
@@ -293,3 +294,8 @@
             }
           });
         </script>
+        <script>
+          $(document).ready(function () {
+              $('#table4').dataTable();
+          });
+      </script>

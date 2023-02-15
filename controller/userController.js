@@ -20,6 +20,7 @@ const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const productModel = require("../models/productModel");
 const WishlistModel=require('../models/wishlistModel')
+var sanitizer = require('sanitize')();
 
 require("dotenv").config();
 
@@ -834,7 +835,7 @@ module.exports = {
       } else {
         console.log("out o asdfghj");
         order.products.forEach(async (product) => {
-          console.log("out of stockkkkkkkk");
+         
           new_stock = product.productid.stockvalue - product.quantity;
           await productModel.findByIdAndUpdate(
             { _id: product.productid._id },
@@ -884,9 +885,9 @@ module.exports = {
                         { coupenCode: "order.coupon.code" },
                         { $addToSet: { couponUser: req.session.user._id } }
                       );
-                      await CartModel.updateOne(
-                        { _id: req.session.user._id },
-                        { $set: { cart: [] } }
+                      await CartModel.deleteOne(
+                        { userId: req.session.user._id }
+                       
                       );
                       res.json("COD");
                     });
@@ -918,13 +919,13 @@ module.exports = {
                       }
                     )
                     .then(async () => {
-                      await CartModel.updateOne(
-                        { _id: req.session.user._id },
-                        { $set: { cart: [] } }
+                      await CartModel.deleteOne(
+                        {userId: req.session.user._id },
+                       
                       );
                       console.log("inside then function ");
                       let total =(Math.round(order.billamount-(order.billamount*order.coupon.discount)/100))*100
-                      console.log("sdfghj...................");
+                     
                       instance.orders
                         .create({
                           amount: total,
@@ -1028,7 +1029,7 @@ module.exports = {
 
   addAddress: async (req, res, next) => {
     try {
-      const id = req.params.id;
+      const id =  req.session.user._id;
       //console.log(id);
 
       const idExist = await UserModel.findOne({ _id: id });
@@ -1055,10 +1056,11 @@ module.exports = {
   },
   editAddress: async (req, res, next) => {
     try {
+      console.log("H");
       const user = req.session.user;
       //console.log(user)
-      const addId = req.body.id;
-      //console.log(addId)
+      const addId =req.body.id
+      console.log(addId,"adddddd")
       let useraddress = await UserModel.findOne({ _id: user._id });
 
       useraddress.addressData.forEach(function (val) {
