@@ -26,6 +26,7 @@
     "npm-image-zoom": "^1.0.0",
     "randomstring": "^1.2.3",
     "razorpay": "^2.8.4",
+    "sanitize": "^2.1.2",
     "session": "^0.1.0",
     "sharp": "^0.31.3"
   }

@@ -315,6 +315,7 @@ module.exports = {
       let user = req.session.user;
       const id = req.params.id;
       const product = req.res;
+      console.log(product,'this product####');
       const category = await CategoryModel.find();
 
       res.render("user/shop", { user, product, category });
@@ -345,17 +346,54 @@ module.exports = {
   ProductPage: async (req, res, next) => {
     try {
       const id = req.params.id;
+      // const key=req.query.search
+      // console.log(key,"search value")
       //console.log(id);
-      //const category = await CategoryModel.findOne({ _id: id });
-      const product = await ProductModel.findOne({ _id: id }).populate(
+      const category = await CategoryModel.findOne({ _id: id });
+      let product = await ProductModel.findOne({ _id: id }).populate(
         "category"
       );
-      console.log(product);
-
-      res.render("user/singleproduct", { product });
+        res.render("user/singleproduct", { product ,category}); 
+      //console.log(product); 
     } catch (err) {
       next(err);
     }
+  },
+  Search:async(req,res,next)=>{
+    try{
+      let user=req.session.user
+      const category = await CategoryModel.find();
+      // let product = await ProductModel.find()
+      let key = req.query.search
+      //console.log(req.query,"koiiii")
+      let regex = new RegExp('^'+key+'.*','i')
+      let product ={
+        results: await ProductModel.find({productName:regex}),
+      }
+      res.render('user/shop', { product,  user,category })
+
+    }catch(err)
+    {
+      next(err)
+    }
+  },
+  Sort:async (req,res,next)=>{
+    try{
+      
+       
+        // let product ={
+        //   results: await ProductModel.find().sort({ price: -1 }).collation({ locale: "en", numericOrdering: true })
+        // }
+        let products = await ProductModel.find().sort({ price: -1 }).limit(8)
+        console.log(products,"haiiiiiii");
+        res.send({pro:products})
+        // res.render('user/shop', { products,  user })
+      
+
+    }catch(err){
+      next(err)
+    }
+
   },
 
   getCategory: async (req, res, next) => {
@@ -366,7 +404,7 @@ module.exports = {
         "category"
       );
 
-      console.log(products);
+      //console.log(products);
       res.json(products);
 
       //const  productcategory=await ProductModel.findById({_id:nwid}).populate('category')
@@ -846,7 +884,7 @@ module.exports = {
                         { coupenCode: "order.coupon.code" },
                         { $addToSet: { couponUser: req.session.user._id } }
                       );
-                      await UserModel.updateOne(
+                      await CartModel.updateOne(
                         { _id: req.session.user._id },
                         { $set: { cart: [] } }
                       );
@@ -880,7 +918,7 @@ module.exports = {
                       }
                     )
                     .then(async () => {
-                      await UserModel.updateOne(
+                      await CartModel.updateOne(
                         { _id: req.session.user._id },
                         { $set: { cart: [] } }
                       );

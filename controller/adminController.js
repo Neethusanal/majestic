@@ -365,10 +365,10 @@ module.exports = {
 
         })
 
+        console.log(image)
 
-        //console.log(image,"dfghj")
 
-
+        
         const product = await ProductModel.findByIdAndUpdate(
           { _id: id },
           {
@@ -376,7 +376,7 @@ module.exports = {
               productName: req.body.productName,
               category: category._id,
               description: req.body.description,
-              image: image,
+              image:image==null?null: image,
               price: req.body.price,
               quantity: req.body.quantity,
               instock: stock,
