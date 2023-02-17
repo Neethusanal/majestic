@@ -36,7 +36,7 @@ module.exports = {
                 res.render('user/login',{status:false , message:"Admin has banned your account "})
             }
         } else {
-            console.log("&&&&&&&&&&&&&&&")
+        
             res.redirect('/login')
         }
     },
