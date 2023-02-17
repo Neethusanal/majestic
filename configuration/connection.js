@@ -1,7 +1,7 @@
 //mongodb connection
-
+require("dotenv").config();
 const mongoose = require("mongoose");
-mongoose.connect("mongodb://0.0.0.0:27017/majesticbakery",{ useNewUrlParser:true, 
+mongoose.connect('mongodb+srv://neethukumarkk:neethu@cluster0.eaabzwo.mongodb.net/majesticbakery',{ useNewUrlParser:true, 
 useUnifiedTopology:true}, () => {
   console.log(" mongoose database connected");
 });
