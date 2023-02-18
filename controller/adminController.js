@@ -545,7 +545,7 @@ module.exports = {
   //view banner
   getallBanner: async (req, res) => {
     try {
-      const banner = await BannerModel.find({});
+      const banner = await BannerModel.find();
       res.render("admin/viewbanner", { banner });
     } catch (err) {
       console.log("Error Message :", err);
