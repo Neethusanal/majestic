@@ -90,7 +90,7 @@ app.use(function (err, req, res, next) {
     
   } else {
    
-      res.render("Error/404", { error: "server down" });
+      res.render("Error/404", { error: err.message });
     
   }
 });
