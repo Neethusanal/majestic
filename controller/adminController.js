@@ -21,7 +21,7 @@ module.exports = {
   login: (req, res, next) => {
     try {
       if (req.session.doLogin) {
-        res.render("admin/adminhome");
+        res.redirect("/admin/adminhome");
       } else {
         res.render("admin/adminlogin");
       }
@@ -546,6 +546,7 @@ module.exports = {
   getallBanner: async (req, res) => {
     try {
       const banner = await BannerModel.find();
+      console.log(banner);
       res.render("admin/viewbanner", { banner });
     } catch (err) {
       console.log("Error Message :", err);
