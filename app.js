@@ -86,11 +86,11 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   if (err.status == 404) {
    
-      res.render("404", { error: err.message });
+      res.render("Error/404", { error: err.message });
     
   } else {
    
-      res.render("404", { error: "server down" });
+      res.render("Error/404", { error: "server down" });
     
   }
 });
