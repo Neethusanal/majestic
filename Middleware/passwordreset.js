@@ -19,7 +19,7 @@ module.exports= {
         from: process.env.ACCOUNT_NAME,
         to:  email,
         subject: "Link to reset password: ",
-        html: '<p>Hi '+fullName+',Forgot password?</p> <p> Click the link below to reset password </p><a href="http://localhost:3000/resetpassword?token='+token+'">Click here</a>' // html body
+        html: '<p>Hi '+fullName+',Forgot password?</p> <p> Click the link below to reset password </p><a href="https://majesticbakery.online/resetpassword?token='+token+'">Click here</a>' // html body
       }
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
