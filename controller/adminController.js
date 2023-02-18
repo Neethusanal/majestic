@@ -544,8 +544,15 @@ module.exports = {
 
   //view banner
   getallBanner: async (req, res) => {
-    const banner = await BannerModel.find({});
-    res.render("admin/viewbanner", { banner });
+    try {
+      const banner = await BannerModel.find({});
+      res.render("admin/viewbanner", { banner });
+    } catch (error) {
+      console.log("Error Message :", error);
+      error.admin = true;
+      next(error); 
+    }
+   
   },
   //add Banner
   addBannerpage: (req, res) => {
