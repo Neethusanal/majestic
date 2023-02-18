@@ -547,10 +547,10 @@ module.exports = {
     try {
       const banner = await BannerModel.find({});
       res.render("admin/viewbanner", { banner });
-    } catch (error) {
-      console.log("Error Message :", error);
+    } catch (err) {
+      console.log("Error Message :", err);
       error.admin = true;
-      next(error); 
+      next(err); 
     }
    
   },
