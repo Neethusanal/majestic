@@ -21,4 +21,4 @@ const bannerSchema = new mongoose.Schema({
 
 })
 
-module.exports = BannerModel = mongoose.model('Banner', bannerSchema);
+module.exports = BannerModel = mongoose.model('banners', bannerSchema);
