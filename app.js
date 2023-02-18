@@ -61,22 +61,40 @@ app.use(session({
 app.use("/admin", adminRouter);
 app.use("/", userRouter);
 
-app.use(function (req, res, next) {
-    next(createError(404));
-  });
+// app.use(function (req, res, next) {
+//     next(createError(404));
+//   });
   
-  // error handler
-  app.use(function (err, req, res, next) {
-    console.log(err,"define error");
-    // set locals, only providing error in development
-   // // console.log(err);
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
-  ///// console.log(res.locals.message);
-    // render the error page
-    res.status(err.status || 500);
-    res.render('Error/404')
-    // res.send('dont worry u will gt..');
+//   // error handler
+//   app.use(function (err, req, res, next) {
+//     console.log(err,"define error");
+//     // set locals, only providing error in development
+//    // // console.log(err);
+//     res.locals.message = err.message;
+//     res.locals.error = req.app.get('env') === 'development' ? err : {};
+//   ///// console.log(res.locals.message);
+//     // render the error page
+//     res.status(err.status || 500);
+//     res.render('Error/404')
+//     // res.send('dont worry u will gt..');
+// });
+
+// error handler
+app.use(function (err, req, res, next) {
+  console.log(err);
+  // render the error page
+  res.status(err.status || 500);
+  if (err.status == 404) {
+    if (err.admin) {
+      res.render("404", { error: err.message });
+    } else {
+      res.render("404", { error: err.message });
+    }
+  } else {
+   
+      res.render("400", { error: "server down" });
+    
+  }
 });
 
 // // Port number the server will run on
